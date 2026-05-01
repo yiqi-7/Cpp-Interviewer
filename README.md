@@ -43,10 +43,20 @@
 │   │   ├── TCP IP网络编程.pdf
 │   │   ├── 深入理解Linux进程与内存.pdf
 │   │   └── 程序员的自我修养—链接、装载与库.pdf
-│   └── 工具/                 # 开发工具
-│       ├── gdb手册.pdf
-│       ├── MySQL必知必会.pdf
-│       └── 跟我一起写Makefile.pdf
+│   ├── 工具/                 # 开发工具
+│   │   ├── gdb手册.pdf
+│   │   ├── MySQL必知必会.pdf
+│   │   └── 跟我一起写Makefile.pdf
+│   └── 小林coding/           # 小林coding 图解 + 面试题
+│       ├── 面试题/
+│       │   ├── 100道+CPP面试题.pdf
+│       │   ├── 150道MySQL+Redis面试题.pdf
+│       │   ├── 150道计算机网络+操作系统+数据结构与算法面试题.pdf
+│       │   └── 30道Linux命令+Git面试题.pdf
+│       └── 图解系列/
+│           ├── 图解MySQL.pdf
+│           ├── 图解Redis.pdf
+│           └── 图解系统.pdf
 └── README.md
 ```
 
@@ -94,6 +104,7 @@
 | [CodeTop](https://codetop.cc) | 按公司/岗位筛选高频面试题 |
 | [牛客网](https://www.nowcoder.com/search?type=question&query=C%2B%2B) | 国内最大面试题库，有企业真题 |
 | [cppreference](https://zh.cppreference.com) | C++ 标准库权威参考 |
+| [小林coding](https://xiaolincoding.com) | 图解计算机网络、操作系统、MySQL、Redis，面试题汇总 |
 
 ### 推荐搜索入口
 
@@ -108,14 +119,16 @@ Skill 会根据问题类型自动选择最合适的数据源：
 
 | 问题类型 | 首选数据源 | 补充数据源 |
 |---------|-----------|-----------|
-| C++ 语言基础 | 本地八股文 + Effective C++ | huihut/interview、GeeksforGeeks |
+| C++ 语言基础 | 本地八股文 + 小林100道CPP面试题 | huihut/interview、GeeksforGeeks |
 | C++ 新特性 | modern-cpp-features | GeeksforGeeks C++ 教程 |
 | STL 容器/算法原理 | 本地STL源码剖析 | cppreference |
 | 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview |
-| 智能指针/内存管理 | 本地八股文 + Effective C++ | cppreference |
+| 智能指针/内存管理 | 本地八股文 + 小林100道CPP面试题 | cppreference |
 | 数据结构与算法 | 本地八股文算法篇 | leetcode.cn、CodeTop |
-| 操作系统 | 本地八股文计算机基础篇 | huihut/interview |
-| 计算机网络 | 本地八股文 + TCP/IP网络编程 | huihut/interview |
+| 操作系统 | 小林图解系统 + 八股文计算机基础篇 | huihut/interview |
+| 计算机网络 | 八股文 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com |
+| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网 |
+| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks |
 | 某公司高频题 | CodeTop + 牛客网 | leetcode.cn |
 
 ### 高频考点速查

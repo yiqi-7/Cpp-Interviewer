@@ -38,6 +38,15 @@ argument-hint: [你的问题]
 **工具：**
 - `${CLAUDE_SKILL_DIR}/../../books/工具/` — gdb手册、MySQL必知必会、跟我一起写Makefile
 
+**小林coding 系列（图解 + 面试题）：**
+- `${CLAUDE_SKILL_DIR}/../../books/小林coding/面试题/`
+  - 100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）
+  - 150道MySQL+Redis面试题
+  - 150道计算机网络+操作系统+数据结构与算法面试题
+  - 30道Linux命令+Git面试题
+- `${CLAUDE_SKILL_DIR}/../../books/小林coding/图解系列/`
+  - 图解MySQL、图解Redis、图解系统
+
 ### 在线资源（按场景智能选择）
 
 根据问题类型，使用 WebFetch 或 WebSearch 访问以下网站获取补充信息：
@@ -67,27 +76,33 @@ argument-hint: [你的问题]
 - https://www.zhihu.com/search?type=content&q=C%2B%2B面试题
 - https://juejin.cn/search?query=C%2B%2B面试
 
+**小林coding 在线资源：**
+- https://xiaolincoding.com — 小林coding 图解网站，涵盖计算机网络、操作系统、MySQL、Redis、C++面试题等
+
 ### 智能选择策略
 
 根据问题类型，按以下优先级选择数据源：
 
 | 问题类型 | 首选数据源 | 补充数据源 |
 |---------|-----------|-----------|
-| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + Effective C++ | huihut/interview、GeeksforGeeks C++ |
+| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、GeeksforGeeks C++ |
 | C++ 新特性（C++11/14/17/20） | modern-cpp-features（GitHub） | GeeksforGeeks C++ 教程 |
-| STL 容器/算法原理 | 本地STL源码剖析 | cppreference、huihut/interview |
+| STL 容器/算法原理 | 本地STL源码剖析 + 小林100道CPP面试题 | cppreference、huihut/interview |
 | 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、GeeksforGeeks |
-| 智能指针/内存管理/RAII | 本地八股文C++篇 + Effective C++ | huihut/interview、cppreference |
+| 智能指针/内存管理/RAII | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、cppreference |
 | 多线程/并发 | 本地八股文C++篇 | cppreference、modern-cpp-features |
 | 数据结构与算法 | 本地八股文算法篇 + leetcode-master | leetcode.cn、CodeTop |
-| 操作系统（进程/线程/内存） | 本地八股文计算机基础篇 | huihut/interview、GeeksforGeeks |
-| 计算机网络（TCP/UDP/HTTP） | 本地八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview |
+| 操作系统（进程/线程/内存） | 小林图解系统 + 八股文计算机基础篇 | huihut/interview、GeeksforGeeks |
+| 计算机网络（TCP/UDP/HTTP） | 八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com |
+| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网 |
+| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks |
 | 链接/装载/库 | 本地程序员的自我修养 | huihut/interview |
 | Linux 服务器编程 | 本地Linux高性能服务器编程 | 深入理解Linux进程与内存 |
+| Linux 命令 | 小林30道Linux命令+Git面试题 | GeeksforGeeks |
 | 设计模式 | huihut/interview | GeeksforGeeks |
 | gdb 调试 | 本地gdb手册 | GeeksforGeeks |
-| MySQL 数据库 | 本地MySQL必知必会 | GeeksforGeeks、牛客网 |
 | Makefile / 构建 | 本地跟我一起写Makefile | GeeksforGeeks |
+| Git 版本控制 | 小林30道Linux命令+Git面试题 | GeeksforGeeks |
 | 某公司高频面试题 | CodeTop + 牛客网 | leetcode.cn 讨论区 |
 | 面经/面试经验 | 本地八股文面经篇 | 牛客网、知乎搜索 |
 
