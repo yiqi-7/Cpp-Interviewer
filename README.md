@@ -176,12 +176,12 @@ Skill 会根据问题类型自动选择最合适的数据源：
 
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
-# 将 skills/interview/ 复制到 ~/.claude/skills/interview/
+# 直接告诉本地cli, 安装skill ：https://github.com/yiqi-7/Cpp-Interviewer.git
 ```
 
-### 方式二：直接使用
+### 方式二：下载使用
 
-在仓库目录下使用 Claude Code，Skill 会自动识别。
+下载仓库代码后解压, 将文件夹防至~/.claude/skills目录下
 
 ## 注意事项
 
