@@ -13,38 +13,90 @@ argument-hint: [你的问题]
 
 ## 第一步：读取参考资料
 
-根据用户问题的相关领域，读取以下仓库中的参考资料作为知识储备：
+收到用户问题后，先分析问题属于哪个领域，然后选择合适的数据源进行检索。
 
-仓库根目录为 `${CLAUDE_SKILL_DIR}/../..`，书籍按分类存放：
+### 思考过程（内部执行，不输出）
+
+分析用户问题，判断：
+1. 问题属于哪个领域？（C++语言 / 算法 / 操作系统 / 计算机网络 / 工具 / 设计模式 / 新特性）
+2. 需要查哪些资料？
+3. 应该访问哪个在线网站获取最新、最准确的信息？
+
+### 本地书籍资源
+
+仓库根目录为 `${CLAUDE_SKILL_DIR}/../..`，按分类存放：
 
 **八股文（面试核心）：**
-- `${CLAUDE_SKILL_DIR}/../../books/八股文/` 目录下的所有 PDF
-  - C++篇 — C++ 语言面试题
-  - 计算机基础篇 — 操作系统、计算机网络等
-  - 算法篇 — 数据结构与算法
-  - 面经篇 — 真实面试经验
-  - 概述 — 整体框架
+- `${CLAUDE_SKILL_DIR}/../../books/八股文/` — C++篇、计算机基础篇、算法篇、面经篇、概述
 
 **C++ 深入：**
-- `${CLAUDE_SKILL_DIR}/../../books/C++/` 目录下的 PDF
-  - c++知识点全概括、Effective C++、STL源码剖析、深度探索C++对象模型
+- `${CLAUDE_SKILL_DIR}/../../books/C++/` — c++知识点全概括、Effective C++、STL源码剖析、深度探索C++对象模型
 
 **系统与网络：**
-- `${CLAUDE_SKILL_DIR}/../../books/系统与网络/` 目录下的 PDF
-  - Linux高性能服务器编程、TCP/IP网络编程、深入理解Linux进程与内存、程序员的自我修养
+- `${CLAUDE_SKILL_DIR}/../../books/系统与网络/` — Linux高性能服务器编程、TCP/IP网络编程、深入理解Linux进程与内存、程序员的自我修养
 
 **工具：**
-- `${CLAUDE_SKILL_DIR}/../../books/工具/` 目录下的 PDF
-  - gdb手册、MySQL必知必会、跟我一起写Makefile
+- `${CLAUDE_SKILL_DIR}/../../books/工具/` — gdb手册、MySQL必知必会、跟我一起写Makefile
 
-**在线参考资源：**
-- https://github.com/huihut/interview — C/C++ 面试知识总结（37.8k stars）
-- https://github.com/youngyangyang04/leetcode-master — 代码随想录 LeetCode 题解（61.3k stars）
-- https://github.com/AnthonyCalandra/modern-cpp-features — C++11/14/17/20/23 新特性速查（21.6k stars）
-- https://zh.cppreference.com — C++ 标准库权威参考
-- https://codetop.cc — 按公司/岗位筛选高频面试题
+### 在线资源（按场景智能选择）
 
-优先从八股文PDF中查找相关内容，如果不够再参考其他书籍和在线资源。
+根据问题类型，使用 WebFetch 或 WebSearch 访问以下网站获取补充信息：
+
+**GitHub 开源仓库：**
+
+| 仓库 | 适用场景 |
+|------|---------|
+| https://github.com/huihut/interview | C/C++ 面试知识总结，涵盖语言、数据结构、算法、系统、网络、设计模式 — 查综合性面试知识点 |
+| https://github.com/youngyangyang04/leetcode-master | 代码随想录，200+ 道 LeetCode 题解 — 查算法题解和思路 |
+| https://github.com/AnthonyCalandra/modern-cpp-features | C++11/14/17/20/23 新特性速查 — 查 C++ 新特性 |
+| https://github.com/youngyangyang04/TechCPP | C++ 面试 & 学习指南知识点整理 — 查知识点大纲 |
+
+**在线学习 / 刷题平台：**
+
+| 网站 | 适用场景 |
+|------|---------|
+| https://www.geeksforgeeks.org/cpp/cpp-interview-questions/ | C++ 面试题合集，分类清晰 — 查具体面试题和解答 |
+| https://www.geeksforgeeks.org/c-plus-plus/ | C++ 完整教程，从基础到高级 — 查语法细节和示例 |
+| https://leetcode.cn | 算法刷题 — 查算法题的最优解和讨论 |
+| https://codetop.cc | 按公司/岗位筛选高频面试题 — 查某公司高频题 |
+| https://www.nowcoder.com/search?type=question&query=C%2B%2B | 国内最大面试题库 — 查企业真题和面经 |
+| https://zh.cppreference.com | C++ 标准库权威参考 — 查 API 细节、函数签名、行为规范 |
+
+**搜索入口（当以上资源不够时）：**
+- https://github.com/search?q=C%2B%2B+interview&type=repositories
+- https://www.zhihu.com/search?type=content&q=C%2B%2B面试题
+- https://juejin.cn/search?query=C%2B%2B面试
+
+### 智能选择策略
+
+根据问题类型，按以下优先级选择数据源：
+
+| 问题类型 | 首选数据源 | 补充数据源 |
+|---------|-----------|-----------|
+| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + Effective C++ | huihut/interview、GeeksforGeeks C++ |
+| C++ 新特性（C++11/14/17/20） | modern-cpp-features（GitHub） | GeeksforGeeks C++ 教程 |
+| STL 容器/算法原理 | 本地STL源码剖析 | cppreference、huihut/interview |
+| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、GeeksforGeeks |
+| 智能指针/内存管理/RAII | 本地八股文C++篇 + Effective C++ | huihut/interview、cppreference |
+| 多线程/并发 | 本地八股文C++篇 | cppreference、modern-cpp-features |
+| 数据结构与算法 | 本地八股文算法篇 + leetcode-master | leetcode.cn、CodeTop |
+| 操作系统（进程/线程/内存） | 本地八股文计算机基础篇 | huihut/interview、GeeksforGeeks |
+| 计算机网络（TCP/UDP/HTTP） | 本地八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview |
+| 链接/装载/库 | 本地程序员的自我修养 | huihut/interview |
+| Linux 服务器编程 | 本地Linux高性能服务器编程 | 深入理解Linux进程与内存 |
+| 设计模式 | huihut/interview | GeeksforGeeks |
+| gdb 调试 | 本地gdb手册 | GeeksforGeeks |
+| MySQL 数据库 | 本地MySQL必知必会 | GeeksforGeeks、牛客网 |
+| Makefile / 构建 | 本地跟我一起写Makefile | GeeksforGeeks |
+| 某公司高频面试题 | CodeTop + 牛客网 | leetcode.cn 讨论区 |
+| 面经/面试经验 | 本地八股文面经篇 | 牛客网、知乎搜索 |
+
+### 检索执行
+
+1. 先读取本地 PDF 相关章节
+2. 根据上表，用 WebFetch 访问首选在线资源获取补充信息
+3. 如果信息仍不充分，访问补充数据源
+4. 综合所有来源，形成完整的知识储备
 
 ---
 

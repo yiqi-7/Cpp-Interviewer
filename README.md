@@ -95,6 +95,29 @@
 | [牛客网](https://www.nowcoder.com/search?type=question&query=C%2B%2B) | 国内最大面试题库，有企业真题 |
 | [cppreference](https://zh.cppreference.com) | C++ 标准库权威参考 |
 
+### 推荐搜索入口
+
+- [GitHub C++ interview 搜索](https://github.com/search?q=C%2B%2B+interview&type=repositories)
+- [GitHub 八股文搜索](https://github.com/search?q=C%2B%2B+%E5%85%AB%E8%82%A1%E6%96%87&type=repositories)
+- [知乎 C++ 面试题](https://www.zhihu.com/search?type=content&q=C%2B%2B%E9%9D%A2%E8%AF%95%E9%A2%98)
+- [掘金 C++ 面试](https://juejin.cn/search?query=C%2B%2B%E9%9D%A2%E8%AF%95)
+
+### 智能资源选择策略
+
+Skill 会根据问题类型自动选择最合适的数据源：
+
+| 问题类型 | 首选数据源 | 补充数据源 |
+|---------|-----------|-----------|
+| C++ 语言基础 | 本地八股文 + Effective C++ | huihut/interview、GeeksforGeeks |
+| C++ 新特性 | modern-cpp-features | GeeksforGeeks C++ 教程 |
+| STL 容器/算法原理 | 本地STL源码剖析 | cppreference |
+| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview |
+| 智能指针/内存管理 | 本地八股文 + Effective C++ | cppreference |
+| 数据结构与算法 | 本地八股文算法篇 | leetcode.cn、CodeTop |
+| 操作系统 | 本地八股文计算机基础篇 | huihut/interview |
+| 计算机网络 | 本地八股文 + TCP/IP网络编程 | huihut/interview |
+| 某公司高频题 | CodeTop + 牛客网 | leetcode.cn |
+
 ### 高频考点速查
 
 | 考点 | 推荐资料 |
