@@ -55,10 +55,20 @@ argument-hint: [你的问题]
 
 | 仓库 | 适用场景 |
 |------|---------|
-| https://github.com/huihut/interview | C/C++ 面试知识总结，涵盖语言、数据结构、算法、系统、网络、设计模式 — 查综合性面试知识点 |
+| https://github.com/huihut/interview | C/C++ 面试知识总结，涵盖语言、数据结构、算法、系统、网络、设计模式 — **查综合性面试知识点首选** |
+| https://github.com/muluoleiguo/interview | C++ 后端面试知识汇总，涵盖语言基础、STL、操作系统、网络、数据库 — **查C++后端面试高频题** |
+| https://github.com/yzhu798/CodingInterviewsNotes | C++ 面试笔记，涵盖算法、操作系统、网络、数据库、设计模式 — **查面试笔记和知识体系梳理** |
+| https://github.com/guaguaupup/cpp_interview | C++ 面试题整理，语言基础、STL、内存管理、多线程 — **查C++语言细节和代码题** |
 | https://github.com/youngyangyang04/leetcode-master | 代码随想录，200+ 道 LeetCode 题解 — 查算法题解和思路 |
 | https://github.com/AnthonyCalandra/modern-cpp-features | C++11/14/17/20/23 新特性速查 — 查 C++ 新特性 |
 | https://github.com/youngyangyang04/TechCPP | C++ 面试 & 学习指南知识点整理 — 查知识点大纲 |
+
+**面试指南网站：**
+
+| 网站 | 适用场景 |
+|------|---------|
+| https://interviewguide.cn | **面试指南**，覆盖C++、Java、前端、算法、操作系统、网络等 — **查系统性面试知识框架，按岗位分类** |
+| https://xiaolincoding.com | 小林coding 图解网站 — 查图解计算机网络、操作系统、MySQL、Redis |
 
 **在线学习 / 刷题平台：**
 
@@ -76,35 +86,34 @@ argument-hint: [你的问题]
 - https://www.zhihu.com/search?type=content&q=C%2B%2B面试题
 - https://juejin.cn/search?query=C%2B%2B面试
 
-**小林coding 在线资源：**
-- https://xiaolincoding.com — 小林coding 图解网站，涵盖计算机网络、操作系统、MySQL、Redis、C++面试题等
-
 ### 智能选择策略
 
 根据问题类型，按以下优先级选择数据源：
 
 | 问题类型 | 首选数据源 | 补充数据源 |
 |---------|-----------|-----------|
-| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、GeeksforGeeks C++ |
-| C++ 新特性（C++11/14/17/20） | modern-cpp-features（GitHub） | GeeksforGeeks C++ 教程 |
-| STL 容器/算法原理 | 本地STL源码剖析 + 小林100道CPP面试题 | cppreference、huihut/interview |
-| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、GeeksforGeeks |
-| 智能指针/内存管理/RAII | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、cppreference |
-| 多线程/并发 | 本地八股文C++篇 | cppreference、modern-cpp-features |
-| 数据结构与算法 | 本地八股文算法篇 + leetcode-master | leetcode.cn、CodeTop |
-| 操作系统（进程/线程/内存） | 小林图解系统 + 八股文计算机基础篇 | huihut/interview、GeeksforGeeks |
-| 计算机网络（TCP/UDP/HTTP） | 八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com |
-| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网 |
-| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks |
-| 链接/装载/库 | 本地程序员的自我修养 | huihut/interview |
-| Linux 服务器编程 | 本地Linux高性能服务器编程 | 深入理解Linux进程与内存 |
-| Linux 命令 | 小林30道Linux命令+Git面试题 | GeeksforGeeks |
-| 设计模式 | huihut/interview | GeeksforGeeks |
+| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview、muluoleiguo/interview |
+| C++ 新特性（C++11/14/17/20） | modern-cpp-features（GitHub） | interviewguide.cn、GeeksforGeeks C++ 教程 |
+| STL 容器/算法原理 | 本地STL源码剖析 + 小林100道CPP面试题 | cppreference、huihut/interview、guaguaupup/cpp_interview |
+| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、yzhu798/CodingInterviewsNotes、GeeksforGeeks |
+| 智能指针/内存管理/RAII | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview、cppreference |
+| 多线程/并发 | 本地八股文C++篇 + muluoleiguo/interview | cppreference、modern-cpp-features、interviewguide.cn |
+| 数据结构与算法 | 本地八股文算法篇 + leetcode-master | leetcode.cn、CodeTop、yzhu798/CodingInterviewsNotes |
+| 操作系统（进程/线程/内存） | 小林图解系统 + 八股文计算机基础篇 | huihut/interview、muluoleiguo/interview、interviewguide.cn |
+| 计算机网络（TCP/UDP/HTTP） | 八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com、interviewguide.cn |
+| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网、yzhu798/CodingInterviewsNotes |
+| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
+| 链接/装载/库 | 本地程序员的自我修养 | huihut/interview、muluoleiguo/interview |
+| Linux 服务器编程 | 本地Linux高性能服务器编程 | 深入理解Linux进程与内存、muluoleiguo/interview |
+| Linux 命令 | 小林30道Linux命令+Git面试题 | GeeksforGeeks、interviewguide.cn |
+| 设计模式 | huihut/interview | yzhu798/CodingInterviewsNotes、GeeksforGeeks |
 | gdb 调试 | 本地gdb手册 | GeeksforGeeks |
 | Makefile / 构建 | 本地跟我一起写Makefile | GeeksforGeeks |
-| Git 版本控制 | 小林30道Linux命令+Git面试题 | GeeksforGeeks |
-| 某公司高频面试题 | CodeTop + 牛客网 | leetcode.cn 讨论区 |
-| 面经/面试经验 | 本地八股文面经篇 | 牛客网、知乎搜索 |
+| Git 版本控制 | 小林30道Linux命令+Git面试题 | GeeksforGeeks、interviewguide.cn |
+| 某公司高频面试题 | CodeTop + 牛客网 | leetcode.cn 讨论区、interviewguide.cn |
+| 面经/面试经验 | 本地八股文面经篇 | 牛客网、知乎搜索、yzhu798/CodingInterviewsNotes |
+| C++ 后端综合面试 | muluoleiguo/interview + 本地八股文 | huihut/interview、interviewguide.cn |
+| 面试知识体系梳理 | yzhu798/CodingInterviewsNotes + interviewguide.cn | huihut/interview |
 
 ### 检索执行
 

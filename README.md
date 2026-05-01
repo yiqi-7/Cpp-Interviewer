@@ -90,9 +90,19 @@
 | 仓库 | Stars | 内容 |
 |------|-------|------|
 | [huihut/interview](https://github.com/huihut/interview) | 37.8k | C/C++ 面试知识总结，涵盖语言、数据结构、算法、系统、网络、设计模式 |
+| [muluoleiguo/interview](https://github.com/muluoleiguo/interview) | — | C++ 后端面试知识汇总，涵盖语言基础、STL、操作系统、网络、数据库 |
+| [yzhu798/CodingInterviewsNotes](https://github.com/yzhu798/CodingInterviewsNotes) | — | C++ 面试笔记，涵盖算法、操作系统、网络、数据库、设计模式 |
+| [guaguaupup/cpp_interview](https://github.com/guaguaupup/cpp_interview) | — | C++ 面试题整理，语言基础、STL、内存管理、多线程 |
 | [leetcode-master](https://github.com/youngyangyang04/leetcode-master) | 61.3k | 代码随想录，200+ 道 LeetCode 题解，以 C++ 为主语言 |
 | [modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) | 21.6k | C++11/14/17/20/23 新特性速查手册 |
 | [TechCPP](https://github.com/youngyangyang04/TechCPP) | — | C++ 面试 & 学习指南知识点整理 |
+
+### 面试指南网站
+
+| 网站 | 内容 |
+|------|------|
+| [interviewguide.cn](https://interviewguide.cn) | 面试指南，覆盖C++、Java、前端、算法、操作系统、网络等，按岗位分类 |
+| [小林coding](https://xiaolincoding.com) | 图解计算机网络、操作系统、MySQL、Redis，面试题汇总 |
 
 ### 在线学习 / 刷题平台
 
@@ -119,17 +129,18 @@ Skill 会根据问题类型自动选择最合适的数据源：
 
 | 问题类型 | 首选数据源 | 补充数据源 |
 |---------|-----------|-----------|
-| C++ 语言基础 | 本地八股文 + 小林100道CPP面试题 | huihut/interview、GeeksforGeeks |
-| C++ 新特性 | modern-cpp-features | GeeksforGeeks C++ 教程 |
-| STL 容器/算法原理 | 本地STL源码剖析 | cppreference |
-| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview |
-| 智能指针/内存管理 | 本地八股文 + 小林100道CPP面试题 | cppreference |
-| 数据结构与算法 | 本地八股文算法篇 | leetcode.cn、CodeTop |
-| 操作系统 | 小林图解系统 + 八股文计算机基础篇 | huihut/interview |
+| C++ 语言基础 | 本地八股文 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview、muluoleiguo/interview |
+| C++ 新特性 | modern-cpp-features | interviewguide.cn、GeeksforGeeks |
+| STL 容器/算法原理 | 本地STL源码剖析 | cppreference、huihut/interview |
+| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、yzhu798/CodingInterviewsNotes |
+| 智能指针/内存管理 | 本地八股文 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview |
+| 数据结构与算法 | 本地八股文算法篇 | leetcode.cn、CodeTop、yzhu798/CodingInterviewsNotes |
+| 操作系统 | 小林图解系统 + 八股文计算机基础篇 | huihut/interview、muluoleiguo/interview |
 | 计算机网络 | 八股文 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com |
-| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网 |
-| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks |
-| 某公司高频题 | CodeTop + 牛客网 | leetcode.cn |
+| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
+| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
+| C++ 后端综合 | muluoleiguo/interview + 本地八股文 | huihut/interview、interviewguide.cn |
+| 某公司高频题 | CodeTop + 牛客网 | leetcode.cn、interviewguide.cn |
 
 ### 高频考点速查
 
