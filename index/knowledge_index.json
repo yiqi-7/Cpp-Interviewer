@@ -1,0 +1,763 @@
+{
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "description": "面试知识点索引，用于快速定位知识来源",
+    "usage": "根据用户问题中的关键词匹配 topics.keywords，然后按 sources 指向的资料回答"
+  },
+  "domains": [
+    {
+      "name": "C++语言",
+      "topics": [
+        {
+          "id": "cpp_pointer_ref",
+          "name": "指针与引用",
+          "keywords": ["指针", "引用", "pointer", "reference", "常量指针", "指针常量", "this指针", "空指针", "野指针", "悬垂指针"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/guaguaupup/cpp_interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_const", "cpp_memory"]
+        },
+        {
+          "id": "cpp_const",
+          "name": "const关键字",
+          "keywords": ["const", "常量", "const指针", "const引用", "const成员函数", "constexpr", "常量表达式"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_pointer_ref", "cpp_volatile"]
+        },
+        {
+          "id": "cpp_volatile",
+          "name": "volatile关键字",
+          "keywords": ["volatile", "易变", "编译器优化", "硬件寄存器", "中断"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_const", "os_interrupt"]
+        },
+        {
+          "id": "cpp_static_inline",
+          "name": "static与inline",
+          "keywords": ["static", "inline", "静态变量", "静态函数", "内联函数", "内部链接", "外部链接"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/guaguaupup/cpp_interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_storage", "link_translation_unit"]
+        },
+        {
+          "id": "cpp_move_rvalue",
+          "name": "移动语义与右值引用",
+          "keywords": ["移动语义", "右值引用", "std::move", "移动构造", "移动赋值", "完美转发", "forward", "左值", "右值", "万能引用"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/AnthonyCalandra/modern-cpp-features", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_copy", "cpp_smart_ptr", "cpp11_features"]
+        },
+        {
+          "id": "cpp_copy",
+          "name": "拷贝构造与深浅拷贝",
+          "keywords": ["拷贝构造", "深拷贝", "浅拷贝", "copy constructor", "拷贝赋值", "三/五法则", "Rule of Three", "Rule of Five"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/guaguaupup/cpp_interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_move_rvalue", "cpp_destructor", "cpp_operator"]
+        },
+        {
+          "id": "cpp_oop",
+          "name": "面向对象（封装/继承/多态）",
+          "keywords": ["封装", "继承", "多态", "虚函数", "纯虚函数", "抽象类", "虚析构", "is-a", "has-a", "菱形继承", "虚继承"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/深度探索c++对象模型 (Stanley Lippman , 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/muluoleiguo/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["cpp_vtable", "cpp_destructor", "cpp_cast"]
+        },
+        {
+          "id": "cpp_vtable",
+          "name": "虚函数表（vtable）",
+          "keywords": ["虚函数表", "vtable", "vptr", "虚表指针", "动态绑定", "静态绑定", "晚绑定", "早绑定"],
+          "sources": [
+            {"type": "book", "path": "books/C++/深度探索c++对象模型 (Stanley Lippman , 侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["cpp_oop", "os_memory_layout"]
+        },
+        {
+          "id": "cpp_smart_ptr",
+          "name": "智能指针",
+          "keywords": ["智能指针", "shared_ptr", "unique_ptr", "weak_ptr", "auto_ptr", "RAII", "引用计数", "循环引用", "make_shared", "make_unique"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/guaguaupup/cpp_interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["cpp_memory", "cpp_raii", "cpp_move_rvalue"]
+        },
+        {
+          "id": "cpp_memory",
+          "name": "内存管理（new/delete/malloc/free）",
+          "keywords": ["new", "delete", "malloc", "free", "内存泄漏", "内存分配", "堆", "栈", "placement new", "内存对齐"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/系统与网络/程序员的自我修养—链接、装载与库--书签目录.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["cpp_smart_ptr", "os_memory", "cpp_storage"]
+        },
+        {
+          "id": "cpp_storage",
+          "name": "存储区域（栈/堆/全局/常量/BSS）",
+          "keywords": ["栈区", "堆区", "全局区", "常量区", "BSS", "数据段", "代码段", "text段", "存储区域", "内存布局"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/系统与网络/程序员的自我修养—链接、装载与库--书签目录.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_memory", "os_memory_layout"]
+        },
+        {
+          "id": "cpp_cast",
+          "name": "类型转换",
+          "keywords": ["类型转换", "static_cast", "dynamic_cast", "const_cast", "reinterpret_cast", "强制转换", "RTTI"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_oop", "cpp_vtable"]
+        },
+        {
+          "id": "cpp_operator",
+          "name": "运算符重载",
+          "keywords": ["运算符重载", "operator", "重载", "友元函数", "赋值运算符", "自增自减", "下标运算符", "函数调用运算符"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "medium"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_copy", "cpp_oop"]
+        },
+        {
+          "id": "cpp_template",
+          "name": "模板",
+          "keywords": ["模板", "template", "函数模板", "类模板", "特化", "偏特化", "SFINAE", "模板元编程", "变参模板"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_stl", "cpp11_features"]
+        },
+        {
+          "id": "cpp_exception",
+          "name": "异常处理",
+          "keywords": ["异常", "exception", "try", "catch", "throw", "异常安全", "RAII", "noexcept"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_raii", "cpp_smart_ptr"]
+        },
+        {
+          "id": "cpp_destructor",
+          "name": "析构函数",
+          "keywords": ["析构函数", "虚析构", "destructor", "资源释放", "对象销毁", "析构顺序"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_oop", "cpp_memory", "cpp_raii"]
+        }
+      ]
+    },
+    {
+      "name": "STL",
+      "topics": [
+        {
+          "id": "stl_vector",
+          "name": "vector底层原理",
+          "keywords": ["vector", "扩容", "push_back", "迭代器失效", "reserve", "resize", "连续内存", "动态数组"],
+          "sources": [
+            {"type": "book", "path": "books/C++/STL源码剖析 (侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://zh.cppreference.com", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["stl_iterator", "cpp_memory"]
+        },
+        {
+          "id": "stl_map",
+          "name": "map/unordered_map底层",
+          "keywords": ["map", "unordered_map", "红黑树", "哈希表", "有序", "无序", "count", "find", "operator[]"],
+          "sources": [
+            {"type": "book", "path": "books/C++/STL源码剖析 (侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://zh.cppreference.com", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["algo_red_black_tree", "algo_hash"]
+        },
+        {
+          "id": "stl_iterator",
+          "name": "迭代器与迭代器失效",
+          "keywords": ["迭代器", "iterator", "迭代器失效", "失效", "erase", "begin", "end", "++", "分类"],
+          "sources": [
+            {"type": "book", "path": "books/C++/STL源码剖析 (侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["stl_vector", "stl_map"]
+        },
+        {
+          "id": "stl_allocator",
+          "name": "空间配置器",
+          "keywords": ["空间配置器", "allocator", "内存池", "二级配置器", "SGI", "alloc"],
+          "sources": [
+            {"type": "book", "path": "books/C++/STL源码剖析 (侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp_memory", "stl_vector"]
+        }
+      ]
+    },
+    {
+      "name": "C++新特性",
+      "topics": [
+        {
+          "id": "cpp11_features",
+          "name": "C++11新特性",
+          "keywords": ["C++11", "auto", "nullptr", "lambda", "范围for", "初始化列表", "右值引用", "移动语义", "智能指针", "线程", "正则"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/AnthonyCalandra/modern-cpp-features", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/C++/c++知识点全概括.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://interviewguide.cn", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_move_rvalue", "cpp_smart_ptr", "cpp_thread"]
+        },
+        {
+          "id": "cpp14_17_20",
+          "name": "C++14/17/20新特性",
+          "keywords": ["C++14", "C++17", "C++20", "optional", "variant", "any", "结构化绑定", "concepts", "ranges", "coroutine", "协程", "模块"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/AnthonyCalandra/modern-cpp-features", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://interviewguide.cn", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["cpp11_features"]
+        },
+        {
+          "id": "cpp_thread",
+          "name": "多线程与并发",
+          "keywords": ["thread", "mutex", "lock", "atomic", "condition_variable", "future", "async", "线程池", "死锁", "互斥", "同步", "并发"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/AnthonyCalandra/modern-cpp-features", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/muluoleiguo/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["os_thread", "os_deadlock"]
+        }
+      ]
+    },
+    {
+      "name": "算法与数据结构",
+      "topics": [
+        {
+          "id": "algo_sort",
+          "name": "排序算法",
+          "keywords": ["排序", "快排", "归并", "冒泡", "选择", "插入", "堆排序", "桶排序", "计数排序", "sort", "时间复杂度", "稳定性"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道计算机网络+操作系统+数据结构与算法面试题-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["algo_binary_search", "algo_divide_conquer"]
+        },
+        {
+          "id": "algo_binary_search",
+          "name": "二分查找",
+          "keywords": ["二分", "binary search", "二分查找", "有序", "左边界", "右边界"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["algo_sort"]
+        },
+        {
+          "id": "algo_dp",
+          "name": "动态规划",
+          "keywords": ["动态规划", "DP", "dynamic programming", "背包", "最长子序列", "最优子结构", "重叠子问题", "状态转移"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["algo_greedy", "algo_dfs_bfs"]
+        },
+        {
+          "id": "algo_linked_list",
+          "name": "链表",
+          "keywords": ["链表", "单链表", "双链表", "循环链表", "反转", "合并", "环检测", "快慢指针"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["algo_stack_queue"]
+        },
+        {
+          "id": "algo_tree",
+          "name": "二叉树",
+          "keywords": ["二叉树", "遍历", "前序", "中序", "后序", "层序", "BST", "平衡二叉树", "AVL", "红黑树", "B树", "B+树"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["algo_graph", "algo_heap"]
+        },
+        {
+          "id": "algo_graph",
+          "name": "图",
+          "keywords": ["图", "BFS", "DFS", "最短路径", "Dijkstra", "拓扑排序", "并查集", "邻接表", "邻接矩阵"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "high"},
+            {"type": "url", "url": "https://leetcode.cn", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["algo_dfs_bfs", "algo_dp"]
+        },
+        {
+          "id": "algo_stack_queue",
+          "name": "栈与队列",
+          "keywords": ["栈", "队列", "单调栈", "优先队列", "堆", "栈实现队列", "队列实现栈"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "very_high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["algo_linked_list", "algo_tree"]
+        },
+        {
+          "id": "algo_hash",
+          "name": "哈希表",
+          "keywords": ["哈希", "hash", "哈希冲突", "拉链法", "开放寻址", "一致性哈希"],
+          "sources": [
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（算法篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/youngyangyang04/leetcode-master", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["stl_map", "algo_sort"]
+        }
+      ]
+    },
+    {
+      "name": "操作系统",
+      "topics": [
+        {
+          "id": "os_process_thread",
+          "name": "进程与线程",
+          "keywords": ["进程", "线程", "协程", "进程间通信", "IPC", "管道", "消息队列", "共享内存", "信号量", "进程切换", "线程切换", "上下文切换"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/系统与网络/深入理解Linux进程与内存(1-200) - Only chapter1-6 (张彦飞) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道计算机网络+操作系统+数据结构与算法面试题-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/muluoleiguo/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["os_schedule", "os_deadlock", "os_synchronization"]
+        },
+        {
+          "id": "os_memory",
+          "name": "内存管理（虚拟内存/分页/分段）",
+          "keywords": ["虚拟内存", "分页", "分段", "页表", "TLB", "缺页中断", "页面置换", "LRU", "内存映射", "mmap", "brk"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/系统与网络/深入理解Linux进程与内存(1-200) - Only chapter1-6 (张彦飞) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道计算机网络+操作系统+数据结构与算法面试题-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["os_process_thread", "cpp_storage", "os_file"]
+        },
+        {
+          "id": "os_deadlock",
+          "name": "死锁",
+          "keywords": ["死锁", "互斥", "占有并等待", "不可剥夺", "循环等待", "死锁预防", "死锁避免", "死锁检测", "银行家算法"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道计算机网络+操作系统+数据结构与算法面试题-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["os_process_thread", "os_synchronization", "cpp_thread"]
+        },
+        {
+          "id": "os_schedule",
+          "name": "进程调度",
+          "keywords": ["调度", "调度算法", "FCFS", "SJF", "时间片轮转", "优先级", "多级反馈队列", "抢占", "非抢占"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["os_process_thread"]
+        },
+        {
+          "id": "os_synchronization",
+          "name": "同步与互斥",
+          "keywords": ["同步", "互斥", "信号量", "互斥锁", "自旋锁", "读写锁", "条件变量", "管程", "临界区", "PV操作"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["os_deadlock", "os_process_thread"]
+        },
+        {
+          "id": "os_file",
+          "name": "文件系统",
+          "keywords": ["文件系统", "inode", "硬链接", "软链接", "文件描述符", "fd", "VFS", "ext4"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["os_io", "os_memory"]
+        },
+        {
+          "id": "os_io",
+          "name": "IO模型",
+          "keywords": ["IO", "阻塞", "非阻塞", "同步", "异步", "select", "poll", "epoll", "IO多路复用", "Reactor", "Proactor"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解系统-亮白风格-小林coding-v1.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "book", "path": "books/系统与网络/Linux高性能服务器编程].2013.中文版.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/muluoleiguo/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["os_file", "net_tcp"]
+        }
+      ]
+    },
+    {
+      "name": "计算机网络",
+      "topics": [
+        {
+          "id": "net_tcp",
+          "name": "TCP协议",
+          "keywords": ["TCP", "三次握手", "四次挥手", "可靠传输", "滑动窗口", "拥塞控制", "流量控制", "SYN", "ACK", "FIN", "TIME_WAIT"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解网络-小林coding-v4.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/系统与网络/TCP  IP 网络编程 (尹圣雨) (Z-Library).pdf", "relevance": "high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道计算机网络+操作系统+数据结构与算法面试题-小林coding-v2.0.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["net_udp", "net_http", "os_io"]
+        },
+        {
+          "id": "net_udp",
+          "name": "UDP协议",
+          "keywords": ["UDP", "不可靠", "无连接", "广播", "组播", "TCP对比", "适用场景"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解网络-小林coding-v4.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["net_tcp"]
+        },
+        {
+          "id": "net_http",
+          "name": "HTTP/HTTPS",
+          "keywords": ["HTTP", "HTTPS", "GET", "POST", "状态码", "Cookie", "Session", "TLS", "SSL", "证书", "对称加密", "非对称加密"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解网络-小林coding-v4.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["net_tcp", "net_dns"]
+        },
+        {
+          "id": "net_dns",
+          "name": "DNS解析",
+          "keywords": ["DNS", "域名解析", "递归", "迭代", "DNS缓存", "根域名", "TLD"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解网络-小林coding-v4.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["net_http"]
+        },
+        {
+          "id": "net_ip",
+          "name": "IP协议与子网",
+          "keywords": ["IP", "子网", "子网掩码", "CIDR", "ARP", "ICMP", "路由", "NAT"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解网络-小林coding-v4.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（计算机基础篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["net_tcp", "net_dns"]
+        }
+      ]
+    },
+    {
+      "name": "数据库",
+      "topics": [
+        {
+          "id": "db_mysql",
+          "name": "MySQL基础",
+          "keywords": ["MySQL", "SQL", "索引", "事务", "ACID", "隔离级别", "MVCC", "锁", "InnoDB", "MyISAM", "B+树", "慢查询", "EXPLAIN"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解MySQL-小林coding-亮白版-v2.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/工具/MySQL必知必会（文字版）.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道MySQL+Redis面试题-小林coding-v2.0.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["db_redis", "algo_tree"]
+        },
+        {
+          "id": "db_redis",
+          "name": "Redis",
+          "keywords": ["Redis", "缓存", "穿透", "击穿", "雪崩", "持久化", "RDB", "AOF", "数据结构", "String", "Hash", "List", "Set", "ZSet", "分布式锁"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/图解系列/图解Redis-小林coding-亮白版-v2.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/150道MySQL+Redis面试题-小林coding-v2.0.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://xiaolincoding.com", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "high"}
+          ],
+          "interview_frequency": "very_high",
+          "related_topics": ["db_mysql", "algo_hash"]
+        }
+      ]
+    },
+    {
+      "name": "链接装载库",
+      "topics": [
+        {
+          "id": "link_static_dynamic",
+          "name": "静态库与动态库",
+          "keywords": ["静态库", "动态库", ".a", ".so", ".lib", ".dll", "静态链接", "动态链接", "dlopen", "fPIC", "位置无关代码"],
+          "sources": [
+            {"type": "book", "path": "books/系统与网络/程序员的自我修养—链接、装载与库--书签目录.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/muluoleiguo/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["link_process", "os_memory"]
+        },
+        {
+          "id": "link_process",
+          "name": "编译链接流程",
+          "keywords": ["编译", "链接", "预处理", "汇编", "目标文件", "ELF", "符号表", "重定位", "符号解析"],
+          "sources": [
+            {"type": "book", "path": "books/系统与网络/程序员的自我修养—链接、装载与库--书签目录.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "medium"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["link_static_dynamic", "cpp_storage"]
+        }
+      ]
+    },
+    {
+      "name": "工具",
+      "topics": [
+        {
+          "id": "tool_gdb",
+          "name": "GDB调试",
+          "keywords": ["gdb", "调试", "breakpoint", "backtrace", "watch", "next", "step", "continue", "core dump"],
+          "sources": [
+            {"type": "book", "path": "books/工具/gdb手册(debuging_with_gdb)(中文).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/小林coding/面试题/30道Linux命令+Git面试题-小林coding-v2.0.pdf", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["tool_makefile", "tool_linux"]
+        },
+        {
+          "id": "tool_makefile",
+          "name": "Makefile",
+          "keywords": ["Makefile", "make", "编译", "依赖", "目标", "规则", "CMake", "cmake"],
+          "sources": [
+            {"type": "book", "path": "books/工具/跟我一起写Makefile (PDF重制版) (作者 陈皓) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "low"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["link_process", "tool_git"]
+        },
+        {
+          "id": "tool_git",
+          "name": "Git",
+          "keywords": ["git", "版本控制", "分支", "merge", "rebase", "cherry-pick", "stash", "reset", "revert", "冲突"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/面试题/30道Linux命令+Git面试题-小林coding-v2.0.pdf", "relevance": "very_high"},
+            {"type": "url", "url": "https://interviewguide.cn", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["tool_linux"]
+        },
+        {
+          "id": "tool_linux",
+          "name": "Linux命令",
+          "keywords": ["Linux", "命令", "top", "ps", "grep", "awk", "sed", "find", "chmod", "chown", "netstat", "lsof", "strace"],
+          "sources": [
+            {"type": "book", "path": "books/小林coding/面试题/30道Linux命令+Git面试题-小林coding-v2.0.pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/系统与网络/Linux高性能服务器编程].2013.中文版.pdf", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["os_process_thread", "os_io"]
+        }
+      ]
+    },
+    {
+      "name": "设计模式",
+      "topics": [
+        {
+          "id": "dp_singleton",
+          "name": "单例模式",
+          "keywords": ["单例", "singleton", "懒汉", "饿汉", "线程安全", "双重检查锁", "DCLP", "静态局部变量"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "medium"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_thread", "dp_factory"]
+        },
+        {
+          "id": "dp_factory",
+          "name": "工厂模式",
+          "keywords": ["工厂", "factory", "简单工厂", "工厂方法", "抽象工厂", "创建型"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "very_high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["dp_singleton", "dp_observer"]
+        },
+        {
+          "id": "dp_observer",
+          "name": "观察者模式",
+          "keywords": ["观察者", "observer", "发布订阅", "事件", "回调"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "high"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["dp_factory", "dp_strategy"]
+        },
+        {
+          "id": "dp_strategy",
+          "name": "策略模式",
+          "keywords": ["策略", "strategy", "算法族", "if-else替代"],
+          "sources": [
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/yzhu798/CodingInterviewsNotes", "relevance": "medium"}
+          ],
+          "interview_frequency": "medium",
+          "related_topics": ["dp_factory"]
+        },
+        {
+          "id": "dp_raii",
+          "name": "RAII模式",
+          "keywords": ["RAII", "资源获取即初始化", "智能指针", "lock_guard", "unique_lock", "资源管理"],
+          "sources": [
+            {"type": "book", "path": "books/C++/Effective C++ (梅耶, 侯捷) (Z-Library).pdf", "relevance": "very_high"},
+            {"type": "book", "path": "books/八股文/代码随想录知识星球精华（最强八股文）第五版（C++篇）.pdf", "relevance": "high"},
+            {"type": "url", "url": "https://github.com/huihut/interview", "relevance": "high"}
+          ],
+          "interview_frequency": "high",
+          "related_topics": ["cpp_smart_ptr", "cpp_memory"]
+        }
+      ]
+    }
+  ]
+}

@@ -11,109 +11,22 @@ argument-hint: [你的问题]
 
 ---
 
-## 第一步：分析问题领域（内部执行，不输出）
+## 第一步：通过索引快速定位知识来源（内部执行，不输出）
 
-收到用户问题后，快速判断属于哪个领域（C++语言 / 算法 / 操作系统 / 计算机网络 / 工具 / 设计模式），直接进入第二步。
+收到用户问题后，**读取索引文件**快速定位相关资料：
 
-**重要：不要在第一步调用 WebFetch 或 WebSearch，避免卡顿。** 在线资源仅在第三步回答时，如果本地书籍内容不足，才按需使用。
+```
+读取文件：${CLAUDE_SKILL_DIR}/../../index/knowledge_index.json
+```
 
-### 本地书籍资源
+在索引中匹配用户问题的关键词，找到对应的 topics，获取：
+- **sources**：该知识点对应的书籍路径和在线资源
+- **related_topics**：相关联的知识点（用于 Level 2/3 扩展）
+- **interview_frequency**：面试频率（very_high/high/medium）
 
-仓库根目录为 `${CLAUDE_SKILL_DIR}/../..`，按分类存放：
+**只读取索引中匹配的 topic 对应的 sources，不要读取所有资源。** 基于索引指向的本地书籍和自身知识储备直接回答。
 
-**八股文（面试核心）：**
-- `${CLAUDE_SKILL_DIR}/../../books/八股文/` — C++篇、计算机基础篇、算法篇、面经篇、概述
-
-**C++ 深入：**
-- `${CLAUDE_SKILL_DIR}/../../books/C++/` — c++知识点全概括、Effective C++、STL源码剖析、深度探索C++对象模型
-
-**系统与网络：**
-- `${CLAUDE_SKILL_DIR}/../../books/系统与网络/` — Linux高性能服务器编程、TCP/IP网络编程、深入理解Linux进程与内存、程序员的自我修养
-
-**工具：**
-- `${CLAUDE_SKILL_DIR}/../../books/工具/` — gdb手册、MySQL必知必会、跟我一起写Makefile
-
-**小林coding 系列（图解 + 面试题）：**
-- `${CLAUDE_SKILL_DIR}/../../books/小林coding/面试题/`
-  - 100道+CPP面试题（基础+面向对象+STL+内存管理+新特性）
-  - 150道MySQL+Redis面试题
-  - 150道计算机网络+操作系统+数据结构与算法面试题
-  - 30道Linux命令+Git面试题
-- `${CLAUDE_SKILL_DIR}/../../books/小林coding/图解系列/`
-  - 图解MySQL、图解Redis、图解系统
-
-### 在线资源（按场景智能选择）
-
-根据问题类型，使用 WebFetch 或 WebSearch 访问以下网站获取补充信息：
-
-**GitHub 开源仓库：**
-
-| 仓库 | 适用场景 |
-|------|---------|
-| https://github.com/huihut/interview | C/C++ 面试知识总结，涵盖语言、数据结构、算法、系统、网络、设计模式 — **查综合性面试知识点首选** |
-| https://github.com/muluoleiguo/interview | C++ 后端面试知识汇总，涵盖语言基础、STL、操作系统、网络、数据库 — **查C++后端面试高频题** |
-| https://github.com/yzhu798/CodingInterviewsNotes | C++ 面试笔记，涵盖算法、操作系统、网络、数据库、设计模式 — **查面试笔记和知识体系梳理** |
-| https://github.com/guaguaupup/cpp_interview | C++ 面试题整理，语言基础、STL、内存管理、多线程 — **查C++语言细节和代码题** |
-| https://github.com/youngyangyang04/leetcode-master | 代码随想录，200+ 道 LeetCode 题解 — 查算法题解和思路 |
-| https://github.com/AnthonyCalandra/modern-cpp-features | C++11/14/17/20/23 新特性速查 — 查 C++ 新特性 |
-| https://github.com/youngyangyang04/TechCPP | C++ 面试 & 学习指南知识点整理 — 查知识点大纲 |
-
-**面试指南网站：**
-
-| 网站 | 适用场景 |
-|------|---------|
-| https://interviewguide.cn | **面试指南**，覆盖C++、Java、前端、算法、操作系统、网络等 — **查系统性面试知识框架，按岗位分类** |
-| https://xiaolincoding.com | 小林coding 图解网站 — 查图解计算机网络、操作系统、MySQL、Redis |
-
-**在线学习 / 刷题平台：**
-
-| 网站 | 适用场景 |
-|------|---------|
-| https://www.geeksforgeeks.org/cpp/cpp-interview-questions/ | C++ 面试题合集，分类清晰 — 查具体面试题和解答 |
-| https://www.geeksforgeeks.org/c-plus-plus/ | C++ 完整教程，从基础到高级 — 查语法细节和示例 |
-| https://leetcode.cn | 算法刷题 — 查算法题的最优解和讨论 |
-| https://codetop.cc | 按公司/岗位筛选高频面试题 — 查某公司高频题 |
-| https://www.nowcoder.com/search?type=question&query=C%2B%2B | 国内最大面试题库 — 查企业真题和面经 |
-| https://zh.cppreference.com | C++ 标准库权威参考 — 查 API 细节、函数签名、行为规范 |
-
-**搜索入口（当以上资源不够时）：**
-- https://github.com/search?q=C%2B%2B+interview&type=repositories
-- https://www.zhihu.com/search?type=content&q=C%2B%2B面试题
-- https://juejin.cn/search?query=C%2B%2B面试
-
-### 智能选择策略
-
-根据问题类型，按以下优先级选择数据源：
-
-| 问题类型 | 首选数据源 | 补充数据源 |
-|---------|-----------|-----------|
-| C++ 语言基础（指针、引用、const等） | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview、muluoleiguo/interview |
-| C++ 新特性（C++11/14/17/20） | modern-cpp-features（GitHub） | interviewguide.cn、GeeksforGeeks C++ 教程 |
-| STL 容器/算法原理 | 本地STL源码剖析 + 小林100道CPP面试题 | cppreference、huihut/interview、guaguaupup/cpp_interview |
-| 虚函数/多态/对象模型 | 本地深度探索C++对象模型 | huihut/interview、yzhu798/CodingInterviewsNotes、GeeksforGeeks |
-| 智能指针/内存管理/RAII | 本地八股文C++篇 + 小林100道CPP面试题 | huihut/interview、guaguaupup/cpp_interview、cppreference |
-| 多线程/并发 | 本地八股文C++篇 + muluoleiguo/interview | cppreference、modern-cpp-features、interviewguide.cn |
-| 数据结构与算法 | 本地八股文算法篇 + leetcode-master | leetcode.cn、CodeTop、yzhu798/CodingInterviewsNotes |
-| 操作系统（进程/线程/内存） | 小林图解系统 + 八股文计算机基础篇 | huihut/interview、muluoleiguo/interview、interviewguide.cn |
-| 计算机网络（TCP/UDP/HTTP） | 八股文计算机基础篇 + TCP/IP网络编程 | huihut/interview、xiaolincoding.com、interviewguide.cn |
-| MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、牛客网、yzhu798/CodingInterviewsNotes |
-| Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
-| 链接/装载/库 | 本地程序员的自我修养 | huihut/interview、muluoleiguo/interview |
-| Linux 服务器编程 | 本地Linux高性能服务器编程 | 深入理解Linux进程与内存、muluoleiguo/interview |
-| Linux 命令 | 小林30道Linux命令+Git面试题 | GeeksforGeeks、interviewguide.cn |
-| 设计模式 | huihut/interview | yzhu798/CodingInterviewsNotes、GeeksforGeeks |
-| gdb 调试 | 本地gdb手册 | GeeksforGeeks |
-| Makefile / 构建 | 本地跟我一起写Makefile | GeeksforGeeks |
-| Git 版本控制 | 小林30道Linux命令+Git面试题 | GeeksforGeeks、interviewguide.cn |
-| 某公司高频面试题 | CodeTop + 牛客网 | leetcode.cn 讨论区、interviewguide.cn |
-| 面经/面试经验 | 本地八股文面经篇 | 牛客网、知乎搜索、yzhu798/CodingInterviewsNotes |
-| C++ 后端综合面试 | muluoleiguo/interview + 本地八股文 | huihut/interview、interviewguide.cn |
-| 面试知识体系梳理 | yzhu798/CodingInterviewsNotes + interviewguide.cn | huihut/interview |
-
-### 检索执行
-
-1. 基于本地书籍和自身知识储备回答
-2. 仅在本地内容不足时，才按需用 WebFetch 访问在线资源补充
+**重要：不要在第一步调用 WebFetch 或 WebSearch。** 在线资源仅在回答内容不足时才按需使用。
 
 ---
 
