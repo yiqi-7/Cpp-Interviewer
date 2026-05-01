@@ -60,29 +60,6 @@
 └── README.md
 ```
 
-## 书籍筛选说明
-
-以面试官角度筛选，标准为：
-
-| 标准 | 说明 |
-|------|------|
-| 面试直接相关 | 优先选择面试高频考点覆盖的书籍 |
-| 经典权威 | Effective C++、深度探索C++对象模型等公认经典 |
-| 实用性强 | gdb、MySQL、Makefile 等工具类面试也会问 |
-| 体积合理 | 排除了超过 100MB 的书籍（如深入理解计算机系统 91MB、深入理解Linux网络 177MB） |
-
-### 未收录的书籍及原因
-
-| 书籍 | 原因 |
-|------|------|
-| 21天学通C++ | 入门级，面试深度不够 |
-| 深入理解计算机系统（CSAPP） | 91MB 过大，且内容偏硬件底层 |
-| 深入理解Linux网络 | 177MB 过大，内容偏专项 |
-| 深入理解FFmpeg | 太专项，与 C++ 面试关联弱 |
-| 分布式系统概念与设计 | C++ 实习面试较少涉及 |
-| 编码：隐匿在计算机软硬件背后的语言 | 好书但面试直接关联弱 |
-| TCP/IP网络编程（C++目录下） | 与系统与网络目录下重复 |
-
 ## 在线参考资源
 
 ### GitHub 开源仓库
@@ -160,7 +137,7 @@ Skill 会根据问题类型自动选择最合适的数据源：
 ### 方式一：克隆仓库
 
 ```bash
-git clone https://github.com/yiqi-7/-skills.git
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 # 将 skills/interview/ 复制到 ~/.claude/skills/interview/
 ```
 
@@ -173,3 +150,7 @@ git clone https://github.com/yiqi-7/-skills.git
 - PDF 书籍使用 Git LFS 管理，克隆时需要安装 [Git LFS](https://git-lfs.github.com/)
 - 八股文 PDF 为加密文件，Skill 通过内容解析读取，部分格式可能不完整
 - 建议结合在线资源一起使用，互相补充
+
+## 开源许可
+
+本项目采用 [MIT License](LICENSE) 开源。
