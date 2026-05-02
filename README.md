@@ -1,4 +1,4 @@
-[English](README_EN.md) | 中文
+[English](README_EN.md) | [中文](#)
 
 # C++ 面试八股讲解 Skill
 
