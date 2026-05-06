@@ -193,3 +193,5 @@ Download and extract the repository, then place the folder under `~/.claude/skil
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+## Discussion group
+Q:828570482
