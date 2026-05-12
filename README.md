@@ -42,7 +42,7 @@
 
 ### 功能特性
 
-- **面试官视角**：不是直接给答案，而是引导你思考、追问细节、指出常见误区
+- **面试官视角**：引导思考、追问细节、指出误区，而非直接给答案
 - **三级深度扩展**：
     - Level 1 — 只讲当前知识点，讲透讲明白
     - Level 2 — 同方向扩展（如 C++ 语言范围内扩展）
@@ -120,6 +120,8 @@
 
 **新增书籍或网址时，只需更新索引文件即可，无需修改 SKILL.md。**
 
+---
+
 ### 在线参考资源
 
 #### GitHub 开源仓库
@@ -152,7 +154,9 @@
 | [牛客网](https://www.nowcoder.com/search?type=question&query=C%2B%2B) | 国内最大面试题库，有企业真题 |
 | [cppreference](https://zh.cppreference.com) | C++ 标准库权威参考 |
 
-#### 智能资源选择策略
+---
+
+### 智能资源选择策略
 
 Skill 会根据问题类型自动选择最合适的数据源：
 
@@ -169,7 +173,9 @@ Skill 会根据问题类型自动选择最合适的数据源：
 | MySQL 数据库 | 小林图解MySQL + MySQL必知必会 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
 | Redis 缓存 | 小林图解Redis + 小林150道MySQL+Redis面试题 | GeeksforGeeks、yzhu798/CodingInterviewsNotes |
 
-#### 高频考点速查
+---
+
+### 高频考点速查
 
 | 考点 | 推荐资料 |
 |------|---------|
@@ -181,6 +187,8 @@ Skill 会根据问题类型自动选择最合适的数据源：
 | 多线程（thread/mutex/atomic） | cppreference + modern-cpp-features |
 | C++11/14/17/20 新特性 | modern-cpp-features |
 | 算法与数据结构 | leetcode-master + CodeTop |
+
+---
 
 ### 安装方式
 
@@ -316,6 +324,8 @@ Each topic includes:
 
 **To add new books or URLs, just update the index file — no need to modify SKILL.md.**
 
+---
+
 ### Online Reference Resources
 
 #### GitHub Repositories
@@ -348,7 +358,9 @@ Each topic includes:
 | [牛客网](https://www.nowcoder.com/search?type=question&query=C%2B%2B) | China's largest interview question bank with real company questions |
 | [cppreference](https://zh.cppreference.com) | Authoritative C++ standard library reference |
 
-#### Smart Resource Selection Strategy
+---
+
+### Smart Resource Selection Strategy
 
 The Skill automatically selects the best data source based on question type:
 
@@ -365,7 +377,9 @@ The Skill automatically selects the best data source based on question type:
 | MySQL | Xiaolin Visual MySQL + MySQL Crash Course | GeeksforGeeks, yzhu798/CodingInterviewsNotes |
 | Redis | Xiaolin Visual Redis + Xiaolin 150 MySQL+Redis | GeeksforGeeks, yzhu798/CodingInterviewsNotes |
 
-#### High-Frequency Topic Quick Reference
+---
+
+### High-Frequency Topic Quick Reference
 
 | Topic | Recommended Resources |
 |-------|----------------------|
@@ -377,6 +391,8 @@ The Skill automatically selects the best data source based on question type:
 | Multithreading (thread/mutex/atomic) | cppreference + modern-cpp-features |
 | C++11/14/17/20 features | modern-cpp-features |
 | Algorithms & Data Structures | leetcode-master + CodeTop |
+
+---
 
 ### Installation
 
