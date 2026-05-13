@@ -85,6 +85,7 @@ class OpenAICompatibleClient(LLMClient):
         api_key: str,
         base_url: str = "https://api.openai.com/v1",
         model: str = "gpt-4o",
+        timeout: int = 60,
     ):
         """Initialize the OpenAI-compatible client.
 
@@ -92,10 +93,12 @@ class OpenAICompatibleClient(LLMClient):
             api_key: API key for authentication.
             base_url: Base URL of the API endpoint.
             model: Model name to use.
+            timeout: Request timeout in seconds.
         """
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.model = model
+        self.timeout = timeout
 
     def generate(
         self,
@@ -104,18 +107,33 @@ class OpenAICompatibleClient(LLMClient):
         system: str = None,
         temperature: float = 0.7,
     ) -> str:
-        """Generate a response using the OpenAI-compatible API."""
-        # TODO: implement in Task 9
-        raise NotImplementedError("OpenAICompatibleClient will be implemented in Task 9")
+        """Call OpenAI-compatible chat completions API."""
+        import json, urllib.request, urllib.error
 
         messages = [
             *([{"role": "system", "content": system}] if system else []),
             {"role": "user", "content": prompt},
         ]
+
         payload = {
             "model": self.model,
             "messages": messages,
             "temperature": temperature,
         }
-        response = self._post("/chat/completions", payload)
-        return response["choices"][0]["message"]["content"]
+
+        req = urllib.request.Request(
+            f"{self.base_url}/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+            },
+            method="POST",
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                return data["choices"][0]["message"]["content"]
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"OpenAI API error {e.code}: {e.read().decode()}") from e
