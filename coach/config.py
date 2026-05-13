@@ -1,5 +1,4 @@
 """默认参数和 Schema 常量。"""
-from dataclasses import dataclass
 
 # === LLM 配置 ===
 DEFAULT_MODEL = "gpt-4o"
