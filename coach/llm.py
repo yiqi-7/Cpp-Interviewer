@@ -6,11 +6,14 @@ class LLMClient(ABC):
     """Abstract base class for LLM clients."""
 
     @abstractmethod
-    def generate(self, prompt: str, *, temperature: float = 0.7) -> str:
+    def generate(
+        self, prompt: str, *, system: str = None, temperature: float = 0.7
+    ) -> str:
         """Generate a response from the LLM.
 
         Args:
             prompt: The input prompt string.
+            system: Optional system prompt for context.
             temperature: Sampling temperature (0.0-1.0).
 
         Returns:
@@ -22,7 +25,9 @@ class LLMClient(ABC):
 class MockLLMClient(LLMClient):
     """Mock LLM client for testing - returns canned responses."""
 
-    def generate(self, prompt: str, *, temperature: float = 0.7) -> str:
+    def generate(
+        self, prompt: str, *, system: str = None, temperature: float = 0.7
+    ) -> str:
         # If prompt contains "生成面试题" -> return mock question
         if "生成面试题" in prompt:
             # Extract topic info from prompt
