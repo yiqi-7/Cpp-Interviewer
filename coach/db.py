@@ -137,7 +137,7 @@ def init_db(db_path: str) -> None:
         )
     """)
     cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_qbank_topic_difficulty
+        CREATE INDEX IF NOT EXISTS idx_question_topic_difficulty
         ON question_bank(topic_id, difficulty_level)
     """)
 
