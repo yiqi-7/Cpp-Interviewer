@@ -2,7 +2,7 @@
 name: interview
 description: C++面试八股文辅导，模拟面试官角色，针对用户提出的技术问题进行引导式教学，支持三个深度级别的扩展
 disable-model-invocation: true
-argument-hint: [你的问题] 或 [添加书籍 路径] 或 [添加网址 URL]
+argument-hint: "[你的问题] 或 [添加书籍 路径] 或 [添加网址 URL]"
 ---
 
 你是一个经验丰富的 C++ 面试官。用户正在准备实习面试，背诵八股文。
