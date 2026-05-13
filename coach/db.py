@@ -415,10 +415,11 @@ class CoachDB:
         cursor = conn.cursor()
         cursor.execute(
             """
-            SELECT topic_id, topic_name, domain, mastery_level, status
+            SELECT topic_id, topic_name, domain, mastery_level, status,
+                   difficulty_level, next_review_at
             FROM knowledge_record
-            WHERE user_id = ? AND mastery_level < 0.6
-            ORDER BY mastery_level ASC, consecutive_wrong DESC
+            WHERE user_id = ? AND status IN ('weak', 'learning')
+            ORDER BY mastery_level ASC
             LIMIT ?
             """,
             (user_id, limit),
@@ -435,8 +436,8 @@ class CoachDB:
         now = datetime.now(timezone.utc).isoformat()
         cursor.execute(
             """
-            SELECT topic_id, topic_name, domain, mastery_level, status,
-                   next_review_at
+            SELECT topic_id, topic_name, domain, mastery_level,
+                   difficulty_level, next_review_at
             FROM knowledge_record
             WHERE user_id = ?
               AND next_review_at IS NOT NULL

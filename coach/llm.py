@@ -97,7 +97,25 @@ class OpenAICompatibleClient(LLMClient):
         self.base_url = base_url.rstrip("/")
         self.model = model
 
-    def generate(self, prompt: str, *, temperature: float = 0.7) -> str:
+    def generate(
+        self,
+        prompt: str,
+        *,
+        system: str = None,
+        temperature: float = 0.7,
+    ) -> str:
         """Generate a response using the OpenAI-compatible API."""
         # TODO: implement in Task 9
         raise NotImplementedError("OpenAICompatibleClient will be implemented in Task 9")
+
+        messages = [
+            *([{"role": "system", "content": system}] if system else []),
+            {"role": "user", "content": prompt},
+        ]
+        payload = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": temperature,
+        }
+        response = self._post("/chat/completions", payload)
+        return response["choices"][0]["message"]["content"]

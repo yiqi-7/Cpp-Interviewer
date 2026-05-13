@@ -1,4 +1,5 @@
 """调度器：根据 candidate_score 公式选择下一个复习主题。"""
+from datetime import datetime, timezone
 from typing import Optional
 
 from coach.config import SCHEDULER_WEIGHTS
@@ -16,6 +17,16 @@ class Scheduler:
         """
         self.index = knowledge_index
         self.recent_question_ids: list[str] = []
+
+    def _is_due(self, next_review_at: Optional[str]) -> bool:
+        """判断主题是否已到复习时间。"""
+        if not next_review_at:
+            return False
+        try:
+            due_time = datetime.fromisoformat(next_review_at.replace('Z', '+00:00'))
+            return due_time <= datetime.now(timezone.utc)
+        except (ValueError, TypeError):
+            return False
 
     def score_candidate(
         self,
@@ -40,7 +51,7 @@ class Scheduler:
         w = SCHEDULER_WEIGHTS
 
         weakness_score = 1.0 - mastery_level
-        due_review_score = 1.0 if next_review_at else 0.0
+        due_review_score = 1.0 if self._is_due(next_review_at) else 0.0
         interview_frequency_score = min(interview_frequency / 5.0, 1.0)
         difficulty_match_score = max(0.0, 1.0 - abs(difficulty - target_difficulty) / 3.0)
         repetition_penalty = 0.1 if topic_id in self.recent_question_ids else 0.0
