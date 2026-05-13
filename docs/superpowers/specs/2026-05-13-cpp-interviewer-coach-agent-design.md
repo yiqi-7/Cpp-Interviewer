@@ -77,7 +77,8 @@ CREATE TABLE knowledge_record (
     difficulty_level INTEGER DEFAULT 1,
     ease_factor REAL DEFAULT 2.5,
 
-    updated_at TEXT
+    updated_at TEXT,
+    UNIQUE(user_id, topic_id)
 );
 ```
 
@@ -300,27 +301,20 @@ Cpp-Interviewer/
 ├── index/
 │   └── knowledge_index.json   # 现有，不动
 ├── coach/
-│   ├── cli.py                 # 命令入口
-│   ├── db.py                 # SQLite 读写
+│   ├── __init__.py
+│   ├── config.py             # 默认参数
 │   ├── models.py             # 数据结构
+│   ├── db.py                 # SQLite 读写
+│   ├── llm.py                # LLMClient / MockLLMClient / OpenAICompatibleClient
+│   ├── skill_adapter.py      # SkillPromptAdapter
 │   ├── scheduler.py          # 选题 + 难度调度
 │   ├── evaluator.py          # 结构化评分
-│   ├── skill_adapter.py      # SkillPromptAdapter
-│   ├── prompts.py             # 评价/出题 prompt
-│   └── config.py              # 默认参数
-├── data/
-│   └── coach.sqlite           # 状态存储
-└── README.md
+│   └── cli.py                # CLI 入口
+├── tests/
+│   ├── test_db.py
+│   ├── test_scheduler.py
+│   ├── test_evaluator.py
+│   └── test_skill_adapter.py
+└── data/
+    └── coach.sqlite           # 状态存储
 ```
-
-## 11. 实现顺序
-
-1. 修复 SKILL.md YAML metadata 格式错误
-2. 拆分 /interview 和 /coach 两种模式（新建 COACH_SKILL.md）
-3. 实现 SQLite 状态层（6张表 + db.py）
-4. 实现 Evaluator 的结构化 JSON 输出
-5. 实现 Scheduler 的薄弱点优先选题
-6. 实现 CLI 命令和 status 可视化
-7. 实现 /coach review 详细评价查看
-8. 实现 /coach plan 训练计划生成
-9. 实现 /coach export 记录导出

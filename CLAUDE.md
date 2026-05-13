@@ -2,54 +2,49 @@
 
 > 你的 C++ 面试学习伙伴 — 弱项驱动训练、精准诊断、系统化复习
 
+## 快速开始
+
+```bash
+# 训练薄弱知识点
+python -m coach.cli weak
+
+# 指定专题训练
+python -m coach.cli topic 虚函数
+
+# 查看掌握度
+python -m coach.cli status
+
+# 生成今日计划
+python -m coach.cli plan
+```
+
 ## 命令
 
-### `/coach start`
-进入训练模式。先出一道引导题探测你的水平，然后你可以自由输入 topic 进行训练。
+| 命令 | 功能 |
+|------|------|
+| `/coach start` | 进入训练模式，探测水平后循环训练 |
+| `/coach topic <topic>` | 指定专题训练，如 `/coach topic 虚函数` |
+| `/coach weak` | 从薄弱知识点列表依次训练 |
+| `/coach due` | 只训练到期需要复习的知识点 |
+| `/coach status` | 查看掌握度仪表盘 |
+| `/coach plan` | 生成今日训练计划 |
 
-### `/coach topic <topic>`
-指定专题训练。例如：`/coach topic 虚函数`
+## 核心特性
 
-### `/coach weak`
-从你的薄弱知识点列表依次训练（优先训练 mastery_level 最低的 topic）。
+### 弱项驱动训练
 
-### `/coach due`
-只训练到期需要复习的知识点（根据 next_review_at 筛选）。
-
-### `/coach status`
-查看你的掌握度仪表盘：总知识点数、已掌握数、薄弱数、平均掌握度。
-
-### `/coach plan`
-生成今日训练计划，列出最需要加强的薄弱点。
-
-## 工作原理
-
-```
-用户输入 /coach 命令
-       │
-       ▼
-Coach Orchestrator (Python CLI)
-  ├── 加载用户历史状态（SQLite）
-  ├── Scheduler 按 candidate_score 公式选题
-  ├── SkillPromptAdapter 生成题目（读 COACH_SKILL.md）
-  ├── 用户回答
-  ├── Evaluator 六维度评分
-  ├── 更新掌握度 + 写入历史
-  └── 输出极简反馈
-```
-
-### 调度器公式
+根据 Scheduler candidate_score 公式自动优先训练最薄弱的知识点：
 
 ```
 candidate_score =
-  0.40 × weakness_score
-+ 0.25 × due_review_score
-+ 0.20 × interview_frequency_score
-+ 0.10 × difficulty_match_score
-- 0.05 × recent_repetition_penalty
+  0.40 × weakness_score      # 薄弱度
++ 0.25 × due_review_score   # 到期复习
++ 0.20 × interview_frequency_score  # 面试频率
++ 0.10 × difficulty_match_score     # 难度匹配
+- 0.05 × recent_repetition_penalty   # 重复惩罚
 ```
 
-### 六维度评价
+### 六维度精准诊断
 
 | 维度 | 含义 |
 |------|------|
@@ -73,21 +68,30 @@ delta = 0.12 × (score_total - 0.6)
 - SQLite（状态持久化）
 - LLM：MockLLMClient（默认）/ OpenAI Compatible API（可选）
 
+## 项目结构
+
+```
+Cpp-Interviewer/
+├── coach/
+│   ├── __init__.py
+│   ├── config.py      # 配置常量
+│   ├── models.py      # 数据类
+│   ├── db.py          # SQLite 状态层
+│   ├── llm.py         # LLMClient / MockLLMClient / OpenAICompatibleClient
+│   ├── skill_adapter.py  # SkillPromptAdapter
+│   ├── scheduler.py   # 选题调度器
+│   ├── evaluator.py   # 六维度评价器
+│   └── cli.py         # CLI 入口
+├── skills/
+│   ├── coach/SKILL.md       # /coach 命令入口
+│   └── interview/
+│       ├── SKILL.md         # /interview 模式
+│       ├── COACH_SKILL.md   # coach 被动模式
+│       └── shared_rules.md  # 公共面试规则
+└── data/coach.sqlite        # 状态存储
+```
+
 ## 使用限制
 
 - `/coach reset` 和 `/coach export` 尚未实现
 - 真实 LLM 接入需要设置 `OPENAI_API_KEY` 环境变量
-
-## 文件结构
-
-```
-coach/
-├── config.py      # 配置常量
-├── models.py      # 数据类
-├── db.py           # SQLite 状态层
-├── llm.py          # LLMClient / MockLLMClient / OpenAICompatibleClient
-├── skill_adapter.py # SkillPromptAdapter
-├── scheduler.py    # 选题调度器
-├── evaluator.py    # 六维度评价器
-└── cli.py          # CLI 入口
-```
