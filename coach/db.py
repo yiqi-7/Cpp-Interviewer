@@ -32,6 +32,11 @@ def init_db(db_path: str) -> None:
             user_id TEXT PRIMARY KEY,
             total_questions INTEGER DEFAULT 0,
             total_sessions INTEGER DEFAULT 0,
+            current_mode TEXT DEFAULT 'coach',
+            default_style TEXT DEFAULT 'concise',
+            default_depth INTEGER DEFAULT 1,
+            last_topic TEXT,
+            last_session_id INTEGER,
             created_at TEXT DEFAULT (datetime('now', 'utc')),
             updated_at TEXT DEFAULT (datetime('now', 'utc'))
         )
@@ -50,6 +55,7 @@ def init_db(db_path: str) -> None:
             wrong_count INTEGER DEFAULT 0,
             consecutive_right INTEGER DEFAULT 0,
             consecutive_wrong INTEGER DEFAULT 0,
+            last_tested_at TEXT,
             difficulty_level INTEGER DEFAULT 1,
             ease_factor REAL DEFAULT 2.5,
             next_review_at TEXT,
@@ -70,14 +76,17 @@ def init_db(db_path: str) -> None:
     # 3. qa_history
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS qa_history (
-            qa_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT NOT NULL,
             session_id INTEGER,
             topic_id TEXT NOT NULL,
+            question_id INTEGER,
             question TEXT NOT NULL,
             user_answer TEXT NOT NULL,
             reference_answer TEXT,
-            weakness_tags TEXT DEFAULT '[]',
+            final_rating TEXT,
+            score_total REAL,
+            weakness_summary TEXT,
             created_at TEXT DEFAULT (datetime('now', 'utc'))
         )
     """)
@@ -89,10 +98,9 @@ def init_db(db_path: str) -> None:
     # 4. evaluation_detail
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS evaluation_detail (
-            detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             qa_id INTEGER NOT NULL,
             rating TEXT NOT NULL,
-            score_total REAL NOT NULL,
             correctness REAL NOT NULL,
             completeness REAL NOT NULL,
             depth REAL NOT NULL,
@@ -102,9 +110,10 @@ def init_db(db_path: str) -> None:
             missing_points TEXT DEFAULT '[]',
             wrong_points TEXT DEFAULT '[]',
             weakness_tags TEXT DEFAULT '[]',
+            hallucinated_points TEXT DEFAULT '[]',
             evaluator_confidence REAL DEFAULT 1.0,
             created_at TEXT DEFAULT (datetime('now', 'utc')),
-            FOREIGN KEY (qa_id) REFERENCES qa_history(qa_id)
+            FOREIGN KEY (qa_id) REFERENCES qa_history(id)
         )
     """)
     cursor.execute("""
@@ -115,30 +124,39 @@ def init_db(db_path: str) -> None:
     # 5. training_session
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS training_session (
-            session_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT NOT NULL,
-            topic_id TEXT,
-            started_at TEXT DEFAULT (datetime('now', 'utc')),
-            ended_at TEXT,
-            status TEXT DEFAULT 'active'
+            mode TEXT,
+            target_domain TEXT,
+            start_time TEXT DEFAULT (datetime('now', 'utc')),
+            end_time TEXT,
+            total_questions INTEGER DEFAULT 0,
+            average_score REAL DEFAULT 0.0,
+            summary TEXT
         )
     """)
 
     # 6. question_bank
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS question_bank (
-            question_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             topic_id TEXT NOT NULL,
-            topic_name TEXT NOT NULL,
+            difficulty INTEGER DEFAULT 1,
+            question_type TEXT,
             question TEXT NOT NULL,
             reference_answer TEXT,
-            difficulty_level INTEGER DEFAULT 1,
+            key_points TEXT DEFAULT '[]',
+            followups TEXT DEFAULT '[]',
+            source TEXT,
+            skill_version TEXT,
+            generator_version TEXT,
+            created_from_context TEXT,
             created_at TEXT DEFAULT (datetime('now', 'utc'))
         )
     """)
     cursor.execute("""
         CREATE INDEX IF NOT EXISTS idx_question_topic_difficulty
-        ON question_bank(topic_id, difficulty_level)
+        ON question_bank(topic_id, difficulty)
     """)
 
     conn.commit()
@@ -223,15 +241,25 @@ class CoachDB:
             new_consecutive_wrong = old_consecutive_wrong + 1
 
         # 计算下次复习时间
-        next_review = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        next_review = datetime.now(timezone.utc).isoformat()
 
         cursor.execute(
             """
-            INSERT OR REPLACE INTO knowledge_record
+            INSERT INTO knowledge_record
                 (user_id, topic_id, topic_name, domain, mastery_level, status,
                  right_count, wrong_count, consecutive_right, consecutive_wrong,
-                 difficulty_level, ease_factor, next_review_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                 difficulty_level, ease_factor, next_review_at, last_tested_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', 'utc'))
+            ON CONFLICT(user_id, topic_id) DO UPDATE SET
+                mastery_level = excluded.mastery_level,
+                status = excluded.status,
+                right_count = excluded.right_count,
+                wrong_count = excluded.wrong_count,
+                consecutive_right = excluded.consecutive_right,
+                consecutive_wrong = excluded.consecutive_wrong,
+                next_review_at = excluded.next_review_at,
+                last_tested_at = excluded.last_tested_at,
+                updated_at = datetime('now', 'utc')
             """,
             (
                 user_id, topic_id, topic_name, domain, new_mastery, new_status,
@@ -251,22 +279,22 @@ class CoachDB:
         user_answer: str,
         reference_answer: Optional[str],
         evaluation: Optional[EvaluationResult],
+        question_id: Optional[int] = None,
     ) -> int:
         """保存问答记录和评价详情，返回 qa_id。"""
         conn = get_connection(self.db_path)
         cursor = conn.cursor()
 
-        weakness_tags = json.dumps([], ensure_ascii=False)
         cursor.execute(
             """
             INSERT INTO qa_history
-                (user_id, session_id, topic_id, question, user_answer,
-                 reference_answer, weakness_tags)
+                (user_id, session_id, topic_id, question_id, question, user_answer,
+                 reference_answer)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                user_id, session_id, topic_id, question, user_answer,
-                reference_answer, weakness_tags,
+                user_id, session_id, topic_id, question_id, question, user_answer,
+                reference_answer,
             ),
         )
         qa_id = cursor.lastrowid
@@ -275,16 +303,15 @@ class CoachDB:
             cursor.execute(
                 """
                 INSERT INTO evaluation_detail
-                    (qa_id, rating, score_total, correctness, completeness,
+                    (qa_id, rating, correctness, completeness,
                      depth, clarity, code_accuracy, edge_case_awareness,
                      missing_points, wrong_points, weakness_tags,
-                     evaluator_confidence)
+                     hallucinated_points, evaluator_confidence)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     qa_id,
                     evaluation.rating,
-                    evaluation.score_total,
                     evaluation.correctness,
                     evaluation.completeness,
                     evaluation.depth,
@@ -294,20 +321,27 @@ class CoachDB:
                     json.dumps(evaluation.missing_points, ensure_ascii=False),
                     json.dumps(evaluation.wrong_points, ensure_ascii=False),
                     json.dumps(evaluation.weakness_tags, ensure_ascii=False),
+                    json.dumps(getattr(evaluation, 'hallucinated_points', []), ensure_ascii=False),
                     evaluation.evaluator_confidence,
                 ),
             )
 
-            # 更新 weakness_tags 回 qa_history
-            if evaluation.weakness_tags:
-                cursor.execute(
-                    """
-                    UPDATE qa_history
-                    SET weakness_tags = ?
-                    WHERE qa_id = ?
-                    """,
-                    (json.dumps(evaluation.weakness_tags, ensure_ascii=False), qa_id),
-                )
+            # 更新 qa_history 中的评价相关字段
+            cursor.execute(
+                """
+                UPDATE qa_history
+                SET final_rating = ?,
+                    score_total = ?,
+                    weakness_summary = ?
+                WHERE id = ?
+                """,
+                (
+                    evaluation.rating,
+                    evaluation.score_total,
+                    json.dumps(evaluation.weakness_tags, ensure_ascii=False),
+                    qa_id,
+                ),
+            )
 
         # 更新 user_state 计数
         cursor.execute(
@@ -325,17 +359,17 @@ class CoachDB:
         return qa_id
 
     def start_session(
-        self, user_id: str, topic_id: Optional[str] = None
+        self, user_id: str, mode: Optional[str] = None, target_domain: Optional[str] = None
     ) -> int:
         """开始一个新的训练会话，返回 session_id。"""
         conn = get_connection(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO training_session (user_id, topic_id, status)
-            VALUES (?, ?, 'active')
+            INSERT INTO training_session (user_id, mode, target_domain)
+            VALUES (?, ?, ?)
             """,
-            (user_id, topic_id),
+            (user_id, mode, target_domain),
         )
         session_id = cursor.lastrowid
 
@@ -343,28 +377,32 @@ class CoachDB:
             """
             UPDATE user_state
             SET total_sessions = total_sessions + 1,
+                last_session_id = ?,
                 updated_at = datetime('now', 'utc')
             WHERE user_id = ?
             """,
-            (user_id,),
+            (session_id, user_id),
         )
 
         conn.commit()
         conn.close()
         return session_id
 
-    def end_session(self, session_id: int) -> None:
+    def end_session(self, session_id: int, total_questions: int = 0,
+                    average_score: float = 0.0, summary: Optional[str] = None) -> None:
         """结束指定的训练会话。"""
         conn = get_connection(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
             """
             UPDATE training_session
-            SET ended_at = datetime('now', 'utc'),
-                status = 'completed'
-            WHERE session_id = ?
+            SET end_time = datetime('now', 'utc'),
+                total_questions = ?,
+                average_score = ?,
+                summary = ?
+            WHERE id = ?
             """,
-            (session_id,),
+            (total_questions, average_score, summary, session_id),
         )
         conn.commit()
         conn.close()

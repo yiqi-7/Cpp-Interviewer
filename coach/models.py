@@ -7,7 +7,7 @@ from typing import Optional
 class EvaluationResult:
     """结构化评价结果，对应 evaluation_detail 表。"""
     rating: str  # "good" | "okay" | "poor"
-    score_total: float
+    score_total: float  # Overall score, e.g., weighted average of dimensions
     correctness: float
     completeness: float
     depth: float
@@ -17,6 +17,7 @@ class EvaluationResult:
     missing_points: list[str] = field(default_factory=list)
     wrong_points: list[str] = field(default_factory=list)
     weakness_tags: list[str] = field(default_factory=list)
+    hallucinated_points: list[str] = field(default_factory=list)
     evaluator_confidence: float = 1.0
 
 
