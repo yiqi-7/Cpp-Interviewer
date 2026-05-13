@@ -45,6 +45,7 @@ def init_db(db_path: str) -> None:
     # 2. knowledge_record
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS knowledge_record (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT NOT NULL,
             topic_id TEXT NOT NULL,
             topic_name TEXT NOT NULL,
@@ -61,7 +62,7 @@ def init_db(db_path: str) -> None:
             next_review_at TEXT,
             created_at TEXT DEFAULT (datetime('now', 'utc')),
             updated_at TEXT DEFAULT (datetime('now', 'utc')),
-            PRIMARY KEY (user_id, topic_id)
+            UNIQUE(user_id, topic_id)
         )
     """)
     cursor.execute("""
