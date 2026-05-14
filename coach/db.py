@@ -2,6 +2,7 @@
 import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any, Optional
 
 from .config import (
@@ -169,6 +170,7 @@ class CoachDB:
 
     def __init__(self, db_path: str = DEFAULT_DB_PATH) -> None:
         self.db_path = db_path
+        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         init_db(db_path)
 
     def ensure_user(self, user_id: str) -> None:
