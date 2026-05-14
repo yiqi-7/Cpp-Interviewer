@@ -76,6 +76,9 @@
 
 ```
 .
+├── bin/                      # 可选 launcher 脚本
+│   ├── coach                # Linux/macOS
+│   └── coach.bat            # Windows
 ├── coach/                    # 教练 Agent（Python CLI）
 │   ├── cli.py               # CLI 入口
 │   ├── db.py                # SQLite 状态层（6 表）
@@ -98,15 +101,47 @@
 
 ### 快速开始
 
-```bash
-# /coach 模式
-python -m coach.cli status    # 查看掌握度仪表盘
-python -m coach.cli weak      # 训练薄弱知识点
-python -m coach.cli topic 虚函数  # 指定专题训练
-python -m coach.cli plan      # 生成今日训练计划
-python -m coach.cli due       # 训练到期复习的知识点
+### 推荐方式一：Claude Code Skill（直接对话）
 
-# /interview 模式
+安装 Skill 后，在 Claude Code 中直接输入：
+
+```text
+/coach status              # 查看掌握度仪表盘
+/coach topic 虚函数         # 指定专题训练
+/coach weak                # 训练薄弱知识点
+/coach due                 # 训练到期复习的知识点
+/coach plan                # 生成今日训练计划
+/coach start               # 进入完整训练循环
+```
+
+### 推荐方式二：终端命令（pip 安装）
+
+```bash
+pip install -e .
+coach status              # 查看掌握度仪表盘
+coach topic 虚函数         # 指定专题训练
+coach weak                # 训练薄弱知识点
+coach due                 # 训练到期复习的知识点
+coach plan                # 生成今日训练计划
+```
+
+不安装也可使用 launcher 脚本：
+
+```bash
+./bin/coach status
+./bin/coach topic 虚函数
+```
+
+### 开发调试方式
+
+```bash
+python -m coach.cli status
+python -m coach.cli topic 虚函数
+```
+
+### /interview 模式
+
+```
 /interview 虚函数是怎么实现的
 /interview 智能指针有哪几种
 ```
@@ -203,6 +238,9 @@ User CLI → Coach Orchestrator → SkillPromptAdapter → SQLite
 
 ```
 .
+├── bin/                      # Optional launcher scripts
+│   ├── coach                # Linux/macOS
+│   └── coach.bat            # Windows
 ├── coach/                    # Coach Agent (Python CLI)
 │   ├── cli.py               # CLI entry
 │   ├── db.py                # SQLite state layer (6 tables)
@@ -225,15 +263,47 @@ User CLI → Coach Orchestrator → SkillPromptAdapter → SQLite
 
 ### Quick Start
 
-```bash
-# /coach mode
-python -m coach.cli status    # View mastery dashboard
-python -m coach.cli weak      # Train weak topics
-python -m coach.cli topic virtual_function  # Train specific topic
-python -m coach.cli plan      # Generate today's training plan
-python -m coach.cli due       # Train due review topics
+### Recommended Option 1: Claude Code Skill (Direct Conversation)
 
-# /interview mode
+After installing the Skill, directly input in Claude Code:
+
+```text
+/coach status              # View mastery dashboard
+/coach topic virtual_function  # Train specific topic
+/coach weak                # Train weak topics
+/coach due                 # Train due review topics
+/coach plan                # Generate today's training plan
+/coach start               # Enter full training loop
+```
+
+### Recommended Option 2: Terminal Command (pip install)
+
+```bash
+pip install -e .
+coach status              # View mastery dashboard
+coach topic virtual_function  # Train specific topic
+coach weak                # Train weak topics
+coach due                 # Train due review topics
+coach plan                # Generate today's training plan
+```
+
+Without pip install, you can also use the launcher script:
+
+```bash
+./bin/coach status
+./bin/coach topic virtual_function
+```
+
+### Development/Debug Mode
+
+```bash
+python -m coach.cli status
+python -m coach.cli topic virtual_function
+```
+
+### /interview Mode
+
+```
 /interview How are virtual functions implemented
 /interview What types of smart pointers are there
 ```

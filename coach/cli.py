@@ -168,19 +168,24 @@ class CoachCLI:
             )
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("用法: python -m coach.cli start|topic <topic>|weak|due|status|plan|reset|export")
-        sys.exit(1)
+def main(argv: list[str] | None = None) -> int:
+    """CLI entry point. Supports both console_scripts and python -m coach.cli."""
+    if argv is None:
+        argv = sys.argv[1:]
+
+    if len(argv) < 1:
+        print("用法: coach start|topic <专题>|weak|due|status|plan|reset|export")
+        print("提示: 使用 /coach status 等命令在 Claude Code 中直接训练")
+        return 0
 
     repo_path = Path(__file__).parent.parent
     cli = CoachCLI(repo_path=str(repo_path))
 
-    cmd = sys.argv[1]
+    cmd = argv[0]
     if cmd == "start":
         cli.cmd_start()
     elif cmd == "topic":
-        cli.cmd_topic(sys.argv[2] if len(sys.argv) > 2 else "")
+        cli.cmd_topic(argv[1] if len(argv) > 1 else "")
     elif cmd == "weak":
         cli.cmd_weak()
     elif cmd == "due":
@@ -195,7 +200,11 @@ def main():
         cli.cmd_export()
     else:
         print(f"未知命令: {cmd}")
+        print("可用命令: start, topic <专题>, weak, due, status, plan, reset, export")
+        return 1
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
