@@ -162,10 +162,21 @@ git checkout coach-agent   # 切换到 coach-agent 分支
 
 ### 注意事项
 
-- PDF 书籍使用 Git LFS 管理，克隆时需要安装 [Git LFS](https://git-lfs.github.com/)
-- 八股文 PDF 为加密文件，Skill 通过内容解析读取，部分格式可能不完整
+- 本项目**无需 PDF 资料即可使用**，默认基于内置知识点索引和模型知识生成回答。
+- `books/` 目录为可选资料库，未下载或解析失败时不影响核心功能。
 - `/coach reset` 和 `/coach export` 尚未实现
 - 真实 LLM 接入需要设置 `OPENAI_API_KEY` 环境变量
+
+### 可选：启用本地 PDF 资料库
+
+如需使用完整本地资料库，需额外安装 Git LFS：
+
+```bash
+git lfs install
+git lfs pull
+```
+
+部分 PDF 可能存在加密或格式兼容问题；解析失败时系统会自动跳过并使用其他来源补充。
 
 ### 开源许可
 
@@ -324,10 +335,21 @@ Download and extract the repository, then place the folder under `~/.claude/skil
 
 ### Notes
 
-- PDF books are managed with Git LFS. You need [Git LFS](https://git-lfs.github.com/) installed when cloning.
-- Interview PDFs are encrypted files. The Skill parses content directly; some formatting may be incomplete.
+- This project **works without PDF resources**; default responses are based on the built-in knowledge index and model knowledge.
+- `books/` is an optional resource library; missing or failed parsing does not affect core functionality.
 - `/coach reset` and `/coach export` are not yet implemented.
 - Real LLM integration requires setting `OPENAI_API_KEY` environment variable.
+
+### Optional: Enable Local PDF Resource Library
+
+To use the full local resource library, install Git LFS additionally:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+Some PDFs may have encryption or compatibility issues; failed parsing will be skipped and supplemented from other sources.
 
 ### License
 
