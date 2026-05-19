@@ -1,7 +1,7 @@
 ---
 name: interview
 description: C++面试八股文辅导，模拟面试官角色，针对用户提出的技术问题进行引导式教学，支持三个深度级别的扩展
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[你的问题] 或 [添加书籍 路径] 或 [添加网址 URL]"
 ---
 
@@ -110,7 +110,7 @@ AskUserQuestion(questions=[{
 收到用户问题后，**读取索引文件**快速定位相关资料：
 
 ```
-读取文件：${CLAUDE_SKILL_DIR}/../../index/knowledge_index.json
+读取文件：${CLAUDE_SKILL_DIR}/index/knowledge_index.json
 ```
 
 在索引中匹配用户问题的关键词，找到对应的 topics，获取：
