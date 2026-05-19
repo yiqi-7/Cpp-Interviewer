@@ -75,10 +75,7 @@
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 cd Cpp-Interviewer
-# Linux / macOS
-bash setup.sh
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File setup.ps1
+python setup.py
 ```
 
 安装后重启 Claude Code，输入 `/` 即可看到 `interview` 和 `coach`。
@@ -188,10 +185,7 @@ Simulates an interviewer to help you prepare for C++ interviews.
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 cd Cpp-Interviewer
-# Linux / macOS
-bash setup.sh
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File setup.ps1
+python setup.py
 ```
 
 After installation, restart Claude Code. Type `/` to see `interview` and `coach`.
