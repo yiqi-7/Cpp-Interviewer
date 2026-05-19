@@ -70,17 +70,35 @@
 
 ### 安装方式
 
-#### 方式一：克隆仓库（推荐）
+#### 方式一：克隆 + 自动安装（推荐）
 
 ```bash
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git ~/.claude/skills/Cpp-Interviewer
-cd ~/.claude/skills/Cpp-Interviewer
-git checkout coach-agent
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+cd Cpp-Interviewer
+# Linux / macOS
+bash setup.sh
+# Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
-#### 方式二：下载使用
+安装后重启 Claude Code，输入 `/` 即可看到 `interview` 和 `coach`。
 
-下载仓库代码后解压，将文件夹放置到 `~/.claude/skills/` 目录下。
+#### 方式二：手动安装
+
+```bash
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+```
+
+将 `skills/interview/` 和 `skills/coach/` 两个文件夹复制到 `~/.claude/skills/` 下：
+
+```
+~/.claude/skills/
+├── interview/
+│   ├── SKILL.md
+│   └── index/knowledge_index.json
+└── coach/
+    └── SKILL.md
+```
 
 ### 注意事项
 
@@ -165,17 +183,35 @@ Simulates an interviewer to help you prepare for C++ interviews.
 
 ### Installation
 
-#### Option 1: Clone Repository (Recommended)
+#### Option 1: Clone + Auto Install (Recommended)
 
 ```bash
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git ~/.claude/skills/Cpp-Interviewer
-cd ~/.claude/skills/Cpp-Interviewer
-git checkout coach-agent
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+cd Cpp-Interviewer
+# Linux / macOS
+bash setup.sh
+# Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
-#### Option 2: Download
+After installation, restart Claude Code. Type `/` to see `interview` and `coach`.
 
-Download and extract the repository, then place the folder under `~/.claude/skills/`.
+#### Option 2: Manual Install
+
+```bash
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+```
+
+Copy `skills/interview/` and `skills/coach/` to `~/.claude/skills/`:
+
+```
+~/.claude/skills/
+├── interview/
+│   ├── SKILL.md
+│   └── index/knowledge_index.json
+└── coach/
+    └── SKILL.md
+```
 
 ### Notes
 
