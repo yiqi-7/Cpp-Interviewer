@@ -60,6 +60,95 @@
 
 `/coach` 会像面试官一样：**出题 → 等你回答 → 评价 → 追问 → 下一题**。
 
+#### 训练模式交互示例
+
+**专项训练 `/coach 虚函数`**
+
+```
+你：/coach 虚函数
+
+教练：专项训练：vtable
+      掌握度：2.4%
+      难度：基础
+
+      第 1 题：
+      什么是虚函数表（vtable）？每个包含虚函数的类和它的对象分别与 vtable 是什么关系？
+
+你：虚函数表是一个函数指针数组，编译器为每个含虚函数的类生成一张表。类共享一张 vtable，对象通过 vptr 指向它。
+
+教练：评价：概念基本正确，但遗漏了 vptr 的存储位置和继承场景下的表合并规则。
+      薄弱点：vptr 布局、多重继承
+      掌握度更新：2.4% → 12%
+
+      第 2 题：
+      多重继承下，一个对象会有几个 vptr？编译器如何决定调用哪个虚函数？
+```
+
+**薄弱训练 `/coach weak`**
+
+```
+你：/coach weak
+
+教练：当前薄弱点：vtable（掌握度 12%）
+      开始训练...
+
+      第 1 题：
+      虚析构函数的作用是什么？如果基类析构函数不是虚函数，delete 派生类指针会发生什么？
+```
+
+**掌握度仪表盘 `/coach status`**
+
+```
+你：/coach status
+
+教练：📊 掌握度仪表盘
+      ──────────────────────────
+      总知识点：15    已掌握：2
+      薄弱：8       平均掌握度：23%
+      ──────────────────────────
+      ▓▓▓░░░░░░░  虚函数       35%
+      ▓▓░░░░░░░░  智能指针     20%
+      ▓░░░░░░░░░  vtable       12%
+      ░░░░░░░░░░  内存管理      5%
+      ...
+```
+
+**今日计划 `/coach plan`**
+
+```
+你：/coach plan
+
+教练：📋 今日训练计划
+      ──────────────────────────
+      复习（到期）：
+        1. vtable — 上次训练 3 天前，建议复习
+      新增（薄弱）：
+        2. 内存管理 — 掌握度 5%
+        3. 多线程锁 — 掌握度 8%
+      ──────────────────────────
+      输入 /coach 开始按计划训练
+```
+
+**进入训练循环 `/coach start`**
+
+```
+你：/coach start
+
+教练：你想训练哪个方向？
+      - 直接说知识点名称（如"虚函数"、"智能指针"）
+      - weak：训练薄弱知识点
+      - due：复习到期内容
+
+你：虚函数
+
+教练：专项训练：虚函数
+      掌握度：35%
+      难度：中等
+
+      第 1 题：
+      虚函数的动态绑定在编译期和运行期分别做了什么？如果不用虚函数，还有什么方式实现多态？
+```
+
 ### 核心特性
 
 - **面试官视角**：引导思考，不直接给答案
@@ -94,7 +183,13 @@ git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 │   ├── SKILL.md
 │   └── index/knowledge_index.json
 └── coach/
-    └── SKILL.md
+    ├── SKILL.md
+    ├── coach/                # Python 持久化后端
+    │   ├── cli.py
+    │   ├── db.py
+    │   ├── scheduler.py
+    │   └── ...
+    └── index/knowledge_index.json
 ```
 
 ### 注意事项
@@ -170,6 +265,95 @@ Simulates an interviewer to help you prepare for C++ interviews.
 
 `/coach` acts like an interviewer: **ask → wait for your answer → evaluate → follow-up → next question**.
 
+#### Training Mode Interaction Examples
+
+**Specific Topic `/coach virtual_function`**
+
+```
+You: /coach virtual_function
+
+Coach: Training: vtable
+       Mastery: 2.4%
+       Difficulty: Basic
+
+       Q1:
+       What is a vtable? What's the relationship between a class with virtual functions, its objects, and the vtable?
+
+You: A vtable is an array of function pointers. The compiler generates one per class with virtual functions. Objects point to it via vptr.
+
+Coach: Evaluation: Core concept correct, but missed vptr storage layout and inheritance table merging rules.
+       Weakness: vptr layout, multiple inheritance
+       Mastery update: 2.4% → 12%
+
+       Q2:
+       Under multiple inheritance, how many vptrs does an object have? How does the compiler resolve virtual function calls?
+```
+
+**Weak Topics `/coach weak`**
+
+```
+You: /coach weak
+
+Coach: Current weakness: vtable (mastery 12%)
+       Starting training...
+
+       Q1:
+       What's the purpose of a virtual destructor? What happens if you delete a derived class pointer through a non-virtual base destructor?
+```
+
+**Mastery Dashboard `/coach status`**
+
+```
+You: /coach status
+
+Coach: 📊 Mastery Dashboard
+       ──────────────────────────
+       Total: 15    Mastered: 2
+       Weak: 8      Avg Mastery: 23%
+       ──────────────────────────
+       ▓▓▓░░░░░░░  Virtual Functions   35%
+       ▓▓░░░░░░░░  Smart Pointers      20%
+       ▓░░░░░░░░░  vtable              12%
+       ░░░░░░░░░░  Memory Mgmt          5%
+       ...
+```
+
+**Training Plan `/coach plan`**
+
+```
+You: /coach plan
+
+Coach: 📋 Today's Training Plan
+       ──────────────────────────
+       Review (due):
+         1. vtable — last trained 3 days ago, recommended review
+       New (weak):
+         2. Memory Management — mastery 5%
+         3. Thread Locks — mastery 8%
+       ──────────────────────────
+       Type /coach to start training
+```
+
+**Training Loop `/coach start`**
+
+```
+You: /coach start
+
+Coach: What topic would you like to train?
+       - Type a topic name (e.g. "virtual_function", "smart_pointer")
+       - weak: train weak topics
+       - due: review due content
+
+You: virtual_function
+
+Coach: Training: Virtual Functions
+       Mastery: 35%
+       Difficulty: Intermediate
+
+       Q1:
+       What happens at compile time vs runtime for dynamic binding of virtual functions? Besides virtual functions, what other ways can achieve polymorphism?
+```
+
 ### Core Features
 
 - **Interviewer perspective**: Guides thinking, no direct answers
@@ -204,7 +388,13 @@ Copy `skills/interview/` and `skills/coach/` to `~/.claude/skills/`:
 │   ├── SKILL.md
 │   └── index/knowledge_index.json
 └── coach/
-    └── SKILL.md
+    ├── SKILL.md
+    ├── coach/                # Python 持久化后端
+    │   ├── cli.py
+    │   ├── db.py
+    │   ├── scheduler.py
+    │   └── ...
+    └── index/knowledge_index.json
 ```
 
 ### Notes
