@@ -209,6 +209,15 @@ python -m coach.cli topic 虚函数
 # 或者使用安装脚本
 python setup.py
 ```
+## Star History
+
+<a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ### 开源许可
 
@@ -414,6 +423,15 @@ python -m pytest tests/ -v
 python -m coach.cli status
 python -m coach.cli topic virtual_function
 ```
+## Star History
+
+<a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ### License
 
