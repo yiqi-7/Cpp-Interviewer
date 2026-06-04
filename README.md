@@ -201,10 +201,13 @@ git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 ### 开发者调试方式
 
 ```bash
-pip install -e .
-python -m pytest tests/ -v
+# 从 skills/coach/ 目录运行
+cd skills/coach
 python -m coach.cli status
 python -m coach.cli topic 虚函数
+
+# 或者使用安装脚本
+python setup.py
 ```
 
 ### 开源许可
