@@ -12,8 +12,8 @@ def main():
 
     src_interview = script_dir / "skills" / "interview"
     src_coach = script_dir / "skills" / "coach"
-    src_coach_pkg = script_dir / "coach"
-    src_index = script_dir / "index" / "knowledge_index.json"
+    src_coach_pkg = script_dir / "skills" / "coach" / "coach"
+    src_index = script_dir / "skills" / "coach" / "index" / "knowledge_index.json"
 
     dst_interview = skills_dir / "interview"
     dst_coach = skills_dir / "coach"

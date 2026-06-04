@@ -1,1 +1,0 @@
-"""Cpp-Interviewer Coach Agent."""
