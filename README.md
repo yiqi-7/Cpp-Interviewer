@@ -441,10 +441,3 @@ This project is licensed under the [MIT License](https://github.com/yiqi-7/Cpp-I
 
 - Discussion group: Q 828570482
 - Recognized by [LINUX DO](https://linux.do/) community
-### 参考资料
-
-本项目不包含参考资料 PDF，以下资源可自行获取：
-
-- **C++ 基础**：《Effective C++》、《STL 源码剖析》、《深度探索 C++ 对象模型》
-- **面试题**：[小林 Coding](https://www.xiaolincoding.com/) 面试系列
-- **系统与网络**：《Linux 高性能服务器编程》、《TCP/IP 网络编程》
