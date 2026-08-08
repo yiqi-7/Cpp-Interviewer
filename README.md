@@ -225,7 +225,6 @@ python setup.py
 
 ### 社区
 
-- 交流群：Q 828570482
 - 已获 [LINUX DO](https://linux.do/) 社区认可
 
 ---
@@ -440,5 +439,4 @@ This project is licensed under the [MIT License](https://github.com/yiqi-7/Cpp-I
 
 ### Community
 
-- Discussion group: Q 828570482
 - Recognized by [LINUX DO](https://linux.do/) community
