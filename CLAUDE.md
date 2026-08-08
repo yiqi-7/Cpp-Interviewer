@@ -66,7 +66,7 @@ delta = 0.12 × (score_total - 0.6)
 
 - Python 3.10+
 - SQLite（状态持久化）
-- LLM：MockLLMClient（默认）/ OpenAI Compatible API（可选）
+- LLM：当前 agent 自身（Claude Code / Cursor 等），无需 API Key
 
 ## 项目结构
 
@@ -77,10 +77,7 @@ Cpp-Interviewer/
 │   ├── config.py      # 配置常量
 │   ├── models.py      # 数据类
 │   ├── db.py          # SQLite 状态层
-│   ├── llm.py         # LLMClient / MockLLMClient / OpenAICompatibleClient
-│   ├── skill_adapter.py  # SkillPromptAdapter
 │   ├── scheduler.py   # 选题调度器
-│   ├── evaluator.py   # 六维度评价器
 │   └── cli.py         # CLI 入口
 ├── skills/
 │   ├── coach/SKILL.md       # /coach 命令入口
@@ -94,4 +91,3 @@ Cpp-Interviewer/
 ## 使用限制
 
 - `/coach reset` 和 `/coach export` 尚未实现
-- 真实 LLM 接入需要设置 `OPENAI_API_KEY` 环境变量

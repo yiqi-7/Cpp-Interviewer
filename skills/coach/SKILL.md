@@ -17,6 +17,7 @@ cd ~/.claude/skills/coach && python -m coach.cli <command> [args] --json
 | 命令 | 用途 |
 |------|------|
 | `topic-info <id> --json` | 查询知识点掌握度 |
+| `topic-context <id_or_keyword> --json` | **查询 topic 的 keywords / related_topics / sources，用于结构化出题** |
 | `next-topic --difficulty N --json` | 调度器推荐下一个 topic |
 | `save-result --topic-id X --question Q --answer A --evaluation 'JSON' --json` | 保存训练结果 |
 | `status --json` | 掌握度仪表盘 |
@@ -65,14 +66,50 @@ for d in idx.get('domains', []):
 " <用户输入的topic关键词>
 ```
 
-### Step 2: 生成面试题
+### Step 2: 获取 topic context 并生成面试题
 
-基于 topic、difficulty、掌握度，生成一道面试题。要求：
-- 简洁，不超过两句话
-- 考察深层理解，不是背答案
-- difficulty=1：基础概念
-- difficulty=2：深入原理
-- difficulty=3：高难度/边界情况
+**2.1 调用 topic-context 获取结构化信息**
+
+```bash
+cd ~/.claude/skills/coach && python -m coach.cli topic-context <topic_id> --json
+```
+
+解析返回的 `keywords`、`related_topics`、`related_topic_names`。这些字段是出题范围的硬约束。
+
+**2.2 按 difficulty 选择题目模板**
+
+| Difficulty | 模板类型 | 说明 | 示例（topic=虚函数） |
+|-----------|---------|------|---------------------|
+| 1 基础 | **概念定义** | 直接考察核心概念和术语 | "什么是虚函数？它和普通成员函数的本质区别是什么？" |
+| 1 基础 | **使用场景** | 何时用、不用会怎样 | "什么场景下必须把析构函数声明为 virtual？" |
+| 2 中等 | **原理机制** | 考察底层实现和数据结构 | "虚函数动态绑定在编译期和运行期分别做了什么？vtable 和 vptr 是什么关系？" |
+| 2 中等 | **多概念对比** | 把 keywords 中的概念两两对比 | "对比 vptr 存储位置、菱形继承下的二义性问题，与普通成员函数指针的差异。" |
+| 3 深入 | **代码 + 边界** | 给出代码片段追结果、考察异常路径 | "多重继承下，一个对象会有几个 vptr？编译器如何决定调用哪个虚函数？" |
+| 3 深入 | **场景推演** | 在 keywords / related_topics 之间做迁移 | "把虚函数机制迁移到模板元编程或 CRTP 上，会出现什么问题？" |
+
+**2.3 题目硬约束**
+
+- **关键词覆盖**：题目必须显式包含至少 **2 个** keywords 中的术语，或围绕它们展开；不得绕开关键词另起话题。
+- **关联点挂钩**：当 difficulty ≥ 2 时，题目必须至少触及 **1 个** related_topic（可通过"对比""迁移到""和 X 配合"等方式挂钩）。
+- **不超两句话**：题目正文控制在两句话以内，避免堆砌长题干。
+- **不背答案倾向**：避免问"什么是 X 的定义"这类查字典题；优先问"为什么/什么时候/对比/代码结果"。
+- **避免幻觉诱饵**：题目中的术语、数据结构名、API 必须真实存在；不要编造函数名或语法糖。
+
+**2.4 出题示例**
+
+调用 `topic-context cpp_vtable --json` 返回（示意）：
+```json
+{
+  "topic_name": "虚函数表（vtable）",
+  "keywords": ["vtable", "vptr", "动态绑定", "虚析构", "纯虚函数"],
+  "related_topic_names": ["C++对象模型", "多重继承"]
+}
+```
+
+不同 difficulty 出题：
+- **difficulty=1（基础）**："什么是 vtable？每个含虚函数的类和它的对象，分别与 vtable 是什么关系？"
+- **difficulty=2（中等）**："动态绑定在编译期和运行期分别做了什么？vptr 存在对象的哪个位置？"
+- **difficulty=3（深入）**："多重继承下，一个对象会有几个 vptr？编译器如何决定调用哪个虚函数？（挂钩 related=C++对象模型）"
 
 ### Step 3: 展示题目
 
@@ -96,11 +133,17 @@ for d in idx.get('domains', []):
 | 维度 | 评价标准 |
 |------|---------|
 | correctness | 概念是否正确 |
-| completeness | 是否覆盖关键点 |
-| depth | 是否讲到底层机制 |
+| completeness | 是否覆盖 keywords 中的关键术语和核心点 |
+| depth | 是否讲到底层机制（数据结构 / 编译期 vs 运行期） |
 | clarity | 表达是否清晰 |
 | code_accuracy | 代码是否正确（如有代码） |
-| edge_case_awareness | 是否知道边界情况 |
+| edge_case_awareness | 是否知道边界情况（菱形继承、模板特化、内存顺序等） |
+
+**对照 keywords 评分**：把 `keywords` 列表当作"必须提到的核心点"清单。用户回答每覆盖一个关键词，completeness 加分；遗漏的关键术语计入 `missing_points`。
+
+**对照 related_topics 评分**：当 difficulty ≥ 2 时，题目挂钩了某个 related_topic；如果用户完全没意识到关联，completeness 扣分、missing_points 加入该项。
+
+**幻觉检测**：用户回答中出现的 API 名、语法、库函数如果现实中不存在，计入 `hallucinated_points`，correctness 扣分。
 
 计算 `score_total` = 六项加权平均。
 rating：good (>=0.7)，okay (>=0.4)，poor (<0.4)。

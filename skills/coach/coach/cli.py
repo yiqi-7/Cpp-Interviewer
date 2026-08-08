@@ -230,6 +230,63 @@ class CoachCLI:
         else:
             print("导出功能待实现")
 
+    def cmd_topic_context(self, args, json_output=False):
+        """Return keywords + related_topics + name + domain for a topic.
+
+        Usage: topic-context <topic_id_or_keyword> [--json]
+        """
+        if not args:
+            if json_output:
+                _print_json({"error": "missing topic id or keyword"})
+            else:
+                print("用法: topic-context <topic_id_or_keyword>")
+            return
+
+        query = args[0].lower()
+        match = None
+        for t in self.scheduler.index.get("topics", []):
+            tid = (t.get("id") or t.get("topic_id", "")).lower()
+            tname = t.get("name", "").lower()
+            kw_list = [k.lower() for k in t.get("keywords", [])]
+            if query == tid or query in tname or any(query in k for k in kw_list):
+                match = t
+                break
+
+        if match is None:
+            if json_output:
+                _print_json({"error": f"topic not found: {args[0]}"})
+            else:
+                print(f"未找到 topic: {args[0]}")
+            return
+
+        related_ids = match.get("related_topics", []) or []
+        related_names = []
+        for rid in related_ids:
+            for t in self.scheduler.index.get("topics", []):
+                if (t.get("id") or t.get("topic_id", "")) == rid:
+                    related_names.append(t.get("name", rid))
+                    break
+
+        result = {
+            "topic_id": match.get("id") or match.get("topic_id", ""),
+            "topic_name": match.get("name", ""),
+            "domain": match.get("domain", ""),
+            "keywords": match.get("keywords", []),
+            "related_topics": related_ids,
+            "related_topic_names": related_names,
+            "interview_frequency": match.get("interview_frequency", "medium"),
+            "sources": match.get("sources", []),
+        }
+
+        if json_output:
+            _print_json(result)
+        else:
+            print(f"Topic: {result['topic_name']} ({result['topic_id']})")
+            print(f"Domain: {result['domain']}")
+            print(f"Keywords: {', '.join(result['keywords'])}")
+            print(f"Related: {', '.join(result['related_topic_names'])}")
+            print(f"Frequency: {result['interview_frequency']}")
+
 
 def _print_json(data):
     print(json.dumps(data, ensure_ascii=False, indent=None, separators=(",", ":")))
@@ -257,7 +314,7 @@ def main(argv=None):
 
     if len(argv) < 1:
         print("用法: coach <command> [args] [--json]")
-        print("命令: status, weak, due, plan, topic-info <id>, save-result ..., next-topic, reset, export")
+        print("命令: status, weak, due, plan, topic-info <id>, topic-context <id>, save-result ..., next-topic, reset, export")
         return 0
 
     repo_path = Path(__file__).parent.parent
@@ -285,6 +342,14 @@ def main(argv=None):
                 print("用法: topic-info <topic_id>")
             return 1
         cli.cmd_topic_info(rest[0], use_json)
+    elif cmd == "topic-context":
+        if not rest:
+            if use_json:
+                _print_json({"error": "missing topic id or keyword"})
+            else:
+                print("用法: topic-context <topic_id_or_keyword>")
+            return 1
+        cli.cmd_topic_context(rest, use_json)
     elif cmd == "save-result":
         cli.cmd_save_result(rest, use_json)
     elif cmd == "next-topic":

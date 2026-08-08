@@ -3,10 +3,6 @@ import os
 from pathlib import Path
 
 
-# === LLM 配置 ===
-DEFAULT_MODEL = "gpt-4o"
-DEFAULT_TEMPERATURE = 0.7
-
 # === 调度器权重 ===
 SCHEDULER_WEIGHTS = {
     "weakness_score": 0.40,
@@ -56,8 +52,3 @@ def _default_index_path() -> str:
 
 DEFAULT_DB_PATH = _default_db_path()
 KNOWLEDGE_INDEX_FILE = _default_index_path()
-
-# === Skill 路径（兼容旧代码） ===
-SKILL_DIR = "skills/interview"
-COACH_SKILL_FILE = "skills/interview/COACH_SKILL.md"
-SHARED_RULES_FILE = "skills/interview/shared_rules.md"

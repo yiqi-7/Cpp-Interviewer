@@ -23,6 +23,7 @@ C++ 面试学习伙伴，提供学 + 练双模式。
 
 - **`/interview` 直接给精炼答案**：默认简洁模式（300-800 字），不模拟面试、不反问，覆盖 C++ 语言、STL、操作系统、计算机网络、数据库等高频考点
 - **`/coach` 模拟面试官追问**：像真实面试一样出题 → 等你回答 → 六维度评价 → 持续追问挖薄弱点
+- **直接使用当前 agent 作为 LLM**，无需任何 API Key
 - **无需 PDF 资料**，无需安装 Git LFS，下载后直接使用
 
 ### 两种模式
@@ -194,9 +195,8 @@ git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 
 ### 注意事项
 
-- **无需 PDF 资料即可使用**，默认基于内置知识点索引和模型知识生成回答
+- **无需 PDF 资料即可使用**，默认基于内置知识点索引和当前 agent 的知识生成回答
 - `/coach reset` 和 `/coach export` 尚未实现
-- 真实 LLM 接入需要设置 `OPENAI_API_KEY` 环境变量
 
 ### 开发者调试方式
 
@@ -213,9 +213,9 @@ python setup.py
 
 <a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="./assets/star-history-dark.svg" />
+   <source media="(prefers-color-scheme: light)" srcset="./assets/star-history-light.svg" />
+   <img alt="Star History Chart" src="./assets/star-history-light.svg" />
  </picture>
 </a>
 
@@ -240,6 +240,7 @@ Simulates an interviewer to help you prepare for C++ interviews.
 
 - **No direct answers** — guides your thinking, asks follow-up questions, highlights pitfalls
 - **No PDF required** — works out of the box with built-in knowledge index
+- **No API key required** — uses the host agent as LLM
 - **Two modes** — learn + practice
 
 ### Two Modes
@@ -411,9 +412,9 @@ Copy `skills/interview/` and `skills/coach/` to `~/.claude/skills/`:
 
 ### Notes
 
-- **Works without PDF resources** — default responses based on built-in knowledge index and model knowledge
+- **Works without PDF resources** — default responses based on built-in knowledge index and host agent knowledge
+- **No API key required** — uses the host agent (Claude Code / Cursor etc.) as the LLM
 - `/coach reset` and `/coach export` are not yet implemented
-- Real LLM integration requires setting `OPENAI_API_KEY` environment variable
 
 ### Developer / Debug Mode
 
@@ -427,9 +428,9 @@ python -m coach.cli topic virtual_function
 
 <a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=yiqi-7/Cpp-Interviewer&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="./assets/star-history-dark.svg" />
+   <source media="(prefers-color-scheme: light)" srcset="./assets/star-history-light.svg" />
+   <img alt="Star History Chart" src="./assets/star-history-light.svg" />
  </picture>
 </a>
 
