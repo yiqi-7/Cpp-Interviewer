@@ -82,3 +82,6 @@ def test_update_workflow_is_scheduled_and_can_push_generated_assets():
     assert "contents: write" in workflow
     assert "scripts/update_star_history.py" in workflow
     assert "git push" in workflow
+    assert 'git config user.name "Yiqi"' in workflow
+    assert 'git config user.email "yiqi_7@163.com"' in workflow
+    assert "github-actions[bot]" not in workflow
