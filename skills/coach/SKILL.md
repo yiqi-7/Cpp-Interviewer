@@ -21,9 +21,15 @@ python -m coach.cli status --json
 python -m coach.cli weak --json
 python -m coach.cli due --json
 python -m coach.cli plan --json
+python -m coach.cli reset --yes --json
+python -m coach.cli export --format md --output coach-export.md --json
 ```
 
 Prefer `CPP_INTERVIEWER_HOME`, `CPP_INTERVIEWER_DB`, and `CPP_INTERVIEWER_INDEX` for state and index locations. If the CLI is unavailable, continue without persistence and say so briefly.
+
+For `/coach export`, let the user choose `md`, `doc`, `txt`, or `json`. If they only ask to export, ask once for the format; if they do not give a path, use `coach-export.<format>`. Use `doc` for a Word-openable document.
+
+For `/coach reset`, ask for explicit confirmation before running the reset command. Reset clears local training state only and keeps the knowledge index.
 
 ## Discipline
 

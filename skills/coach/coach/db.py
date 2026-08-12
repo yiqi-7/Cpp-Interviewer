@@ -410,6 +410,103 @@ class CoachDB:
         conn.commit()
         conn.close()
 
+    def reset_user_state(self, user_id: str) -> dict[str, int]:
+        """清空指定用户的训练状态，保留题库和知识索引。"""
+        conn = get_connection(self.db_path)
+        cursor = conn.cursor()
+
+        counts: dict[str, int] = {}
+        cursor.execute(
+            """
+            DELETE FROM evaluation_detail
+            WHERE qa_id IN (
+                SELECT id FROM qa_history WHERE user_id = ?
+            )
+            """,
+            (user_id,),
+        )
+        counts["evaluation_detail"] = cursor.rowcount
+
+        for table in ("qa_history", "knowledge_record", "training_session", "user_state"):
+            cursor.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+            counts[table] = cursor.rowcount
+
+        conn.commit()
+        conn.close()
+
+        self.ensure_user(user_id)
+        return counts
+
+    def export_user_data(self, user_id: str) -> dict[str, Any]:
+        """导出指定用户的训练状态快照。"""
+        conn = get_connection(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM user_state WHERE user_id = ?", (user_id,))
+        user_row = cursor.fetchone()
+        user_state = dict(user_row) if user_row else None
+
+        cursor.execute(
+            """
+            SELECT *
+            FROM knowledge_record
+            WHERE user_id = ?
+            ORDER BY updated_at DESC, id DESC
+            """,
+            (user_id,),
+        )
+        knowledge_records = [dict(row) for row in cursor.fetchall()]
+
+        cursor.execute(
+            """
+            SELECT *
+            FROM qa_history
+            WHERE user_id = ?
+            ORDER BY created_at DESC, id DESC
+            """,
+            (user_id,),
+        )
+        qa_history = [dict(row) for row in cursor.fetchall()]
+
+        for qa in qa_history:
+            cursor.execute(
+                """
+                SELECT *
+                FROM evaluation_detail
+                WHERE qa_id = ?
+                ORDER BY id ASC
+                """,
+                (qa["id"],),
+            )
+            qa["evaluation_detail"] = [
+                _decode_json_fields(dict(row), _EVALUATION_JSON_FIELDS)
+                for row in cursor.fetchall()
+            ]
+            qa["weakness_summary"] = _loads_json_or_value(qa.get("weakness_summary"))
+
+        cursor.execute(
+            """
+            SELECT *
+            FROM training_session
+            WHERE user_id = ?
+            ORDER BY start_time DESC, id DESC
+            """,
+            (user_id,),
+        )
+        training_sessions = [dict(row) for row in cursor.fetchall()]
+        conn.close()
+
+        return {
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+            "user_id": user_id,
+            "summary": self.get_status_summary(user_id),
+            "user_state": user_state,
+            "knowledge_records": knowledge_records,
+            "qa_history": qa_history,
+            "training_sessions": training_sessions,
+        }
+
     def get_weak_topics(self, user_id: str, limit: int = 10) -> list[dict[str, Any]]:
         """获取用户掌握度最低的知识点。"""
         conn = get_connection(self.db_path)
@@ -491,3 +588,27 @@ class CoachDB:
             "weak": mastery_row["weak"] or 0,
             "avg_mastery": mastery_row["avg_mastery"] or 0.0,
         }
+
+
+_EVALUATION_JSON_FIELDS = {
+    "missing_points",
+    "wrong_points",
+    "weakness_tags",
+    "hallucinated_points",
+}
+
+
+def _loads_json_or_value(value: Any) -> Any:
+    if not isinstance(value, str) or not value:
+        return value
+    try:
+        return json.loads(value)
+    except json.JSONDecodeError:
+        return value
+
+
+def _decode_json_fields(row: dict[str, Any], fields: set[str]) -> dict[str, Any]:
+    for field in fields:
+        if field in row:
+            row[field] = _loads_json_or_value(row[field])
+    return row

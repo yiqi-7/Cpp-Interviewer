@@ -1,4 +1,5 @@
 """CLI 入口：python -m coach.cli <command> [args] [--json]"""
+import html
 import json
 import sys
 from pathlib import Path
@@ -270,17 +271,78 @@ class CoachCLI:
                 print(f"推荐: {chosen['topic_name']} (掌握度 {chosen['mastery_level']:.1%})")
         return 0
 
-    def cmd_reset(self, json_output=False):
-        if json_output:
-            _print_json({"ok": False, "error": "not implemented"})
-        else:
-            print("重置功能待实现")
+    def cmd_reset(self, args, json_output=False):
+        parsed = _parse_named_args(args)
+        confirmed = "yes" in parsed
+        if not confirmed:
+            result = {"ok": False, "error": "requires --yes"}
+            if json_output:
+                _print_json(result)
+            else:
+                print("重置会清空本地训练记录。确认执行请加 --yes")
+            return 1
 
-    def cmd_export(self, json_output=False):
+        deleted = self.db.reset_user_state("default")
+        result = {"ok": True, "deleted": deleted}
         if json_output:
-            _print_json({"ok": False, "error": "not implemented"})
+            _print_json(result)
         else:
-            print("导出功能待实现")
+            total = sum(deleted.values())
+            print(f"已重置训练状态，共清理 {total} 条记录")
+        return 0
+
+    def cmd_export(self, args, json_output=False):
+        parsed = _parse_named_args(args)
+        fmt_value = parsed.get("format", "json")
+        output = parsed.get("output")
+
+        if fmt_value is True or fmt_value == "":
+            result = {"ok": False, "error": "missing --format value"}
+            if json_output:
+                _print_json(result)
+            else:
+                print("缺少 --format 的取值。可选: json, md, txt, doc")
+            return 1
+        if output is True or output == "":
+            result = {"ok": False, "error": "missing --output value"}
+            if json_output:
+                _print_json(result)
+            else:
+                print("缺少 --output 的文件路径")
+            return 1
+
+        fmt = str(fmt_value).lower()
+        if fmt not in _EXPORT_FORMATS:
+            result = {"ok": False, "error": f"unsupported export format: {fmt}"}
+            if json_output:
+                _print_json(result)
+            else:
+                print("不支持的导出格式。可选: json, md, txt, doc")
+            return 1
+
+        data = self.db.export_user_data("default")
+        rendered = _render_export(data, fmt)
+        if output:
+            output_path = Path(output).expanduser()
+        else:
+            output_path = None
+
+        if output_path:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered, encoding="utf-8")
+            result = {"ok": True, "format": fmt, "output": str(output_path)}
+            if json_output:
+                _print_json(result)
+            else:
+                print(f"已导出: {output_path}")
+        else:
+            if json_output and fmt == "json":
+                print(rendered)
+            elif json_output:
+                _print_json({"ok": True, "format": fmt, "content": rendered})
+            else:
+                print(rendered)
+        return 0
 
     def cmd_topic_context(self, args, json_output=False):
         """Return keywords + related_topics + name + domain for a topic.
@@ -345,14 +407,155 @@ def _print_json(data):
     print(json.dumps(data, ensure_ascii=False, indent=None, separators=(",", ":")))
 
 
+_EXPORT_FORMATS = {"json", "md", "txt", "doc"}
+
+
+def _render_export(data, fmt: str) -> str:
+    if fmt == "json":
+        return json.dumps(data, ensure_ascii=False, indent=2)
+    if fmt == "md":
+        return _render_markdown_export(data)
+    if fmt == "txt":
+        return _render_text_export(data)
+    if fmt == "doc":
+        return _render_doc_export(data)
+    raise ValueError(f"unsupported export format: {fmt}")
+
+
+def _render_markdown_export(data) -> str:
+    lines = [
+        "# Cpp-Interviewer Coach Export",
+        "",
+        f"- User: `{data['user_id']}`",
+        f"- Exported at: `{data['exported_at']}`",
+        f"- Topics: {data['summary']['total']}",
+        f"- Questions: {data['summary']['total_questions']}",
+        f"- Average mastery: {data['summary']['avg_mastery']:.1%}",
+        "",
+        "## Knowledge Records",
+        "",
+    ]
+    if data["knowledge_records"]:
+        lines.append("| Topic | Status | Mastery | Right/Wrong | Next Review |")
+        lines.append("|---|---|---:|---:|---|")
+        for item in data["knowledge_records"]:
+            lines.append(
+                "| {topic_name} (`{topic_id}`) | {status} | {mastery:.1%} | {right}/{wrong} | {next_review} |".format(
+                    topic_name=item["topic_name"],
+                    topic_id=item["topic_id"],
+                    status=item["status"],
+                    mastery=item["mastery_level"] or 0.0,
+                    right=item["right_count"] or 0,
+                    wrong=item["wrong_count"] or 0,
+                    next_review=item["next_review_at"] or "",
+                )
+            )
+    else:
+        lines.append("No knowledge records.")
+
+    lines.extend(["", "## QA History", ""])
+    if data["qa_history"]:
+        for qa in data["qa_history"]:
+            lines.extend(
+                [
+                    f"### {qa['topic_id']} - {qa['created_at']}",
+                    "",
+                    f"- Question: {qa['question']}",
+                    f"- Answer: {qa['user_answer']}",
+                    f"- Rating: {qa.get('final_rating') or ''}",
+                    f"- Score: {qa.get('score_total') if qa.get('score_total') is not None else ''}",
+                ]
+            )
+            for detail in qa.get("evaluation_detail", []):
+                lines.append(f"- Missing: {', '.join(detail.get('missing_points') or [])}")
+                lines.append(f"- Weakness: {', '.join(detail.get('weakness_tags') or [])}")
+            lines.append("")
+    else:
+        lines.append("No QA history.")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _render_text_export(data) -> str:
+    lines = [
+        "Cpp-Interviewer Coach Export",
+        "=" * 30,
+        f"User: {data['user_id']}",
+        f"Exported at: {data['exported_at']}",
+        f"Topics: {data['summary']['total']}",
+        f"Questions: {data['summary']['total_questions']}",
+        f"Average mastery: {data['summary']['avg_mastery']:.1%}",
+        "",
+        "Knowledge Records",
+        "-" * 17,
+    ]
+    if data["knowledge_records"]:
+        for item in data["knowledge_records"]:
+            lines.append(
+                "{topic_name} ({topic_id}) | {status} | mastery {mastery:.1%} | right/wrong {right}/{wrong}".format(
+                    topic_name=item["topic_name"],
+                    topic_id=item["topic_id"],
+                    status=item["status"],
+                    mastery=item["mastery_level"] or 0.0,
+                    right=item["right_count"] or 0,
+                    wrong=item["wrong_count"] or 0,
+                )
+            )
+    else:
+        lines.append("No knowledge records.")
+
+    lines.extend(["", "QA History", "-" * 10])
+    if data["qa_history"]:
+        for qa in data["qa_history"]:
+            lines.append(f"[{qa['created_at']}] {qa['topic_id']}")
+            lines.append(f"Q: {qa['question']}")
+            lines.append(f"A: {qa['user_answer']}")
+            if qa.get("final_rating"):
+                lines.append(f"Rating: {qa['final_rating']} ({qa.get('score_total')})")
+            lines.append("")
+    else:
+        lines.append("No QA history.")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _render_doc_export(data) -> str:
+    md = _render_markdown_export(data)
+    paragraphs = []
+    for line in md.splitlines():
+        escaped = html.escape(line)
+        if line.startswith("# "):
+            paragraphs.append(f"<h1>{html.escape(line[2:])}</h1>")
+        elif line.startswith("## "):
+            paragraphs.append(f"<h2>{html.escape(line[3:])}</h2>")
+        elif line.startswith("### "):
+            paragraphs.append(f"<h3>{html.escape(line[4:])}</h3>")
+        elif line.startswith("|"):
+            paragraphs.append(f"<pre>{escaped}</pre>")
+        elif line:
+            paragraphs.append(f"<p>{escaped}</p>")
+        else:
+            paragraphs.append("<br>")
+    body = "\n".join(paragraphs)
+    return (
+        "<html><head><meta charset=\"utf-8\"><title>Cpp-Interviewer Coach Export</title>"
+        "</head><body>"
+        f"{body}"
+        "</body></html>\n"
+    )
+
+
 def _parse_named_args(args):
     result = {}
     i = 0
     while i < len(args):
-        if args[i].startswith("--") and i + 1 < len(args):
+        if args[i].startswith("--") and i + 1 < len(args) and not args[i + 1].startswith("--"):
             key = args[i][2:]
             result[key] = args[i + 1]
             i += 2
+        elif args[i].startswith("--"):
+            result[args[i][2:]] = True
+            i += 1
         else:
             i += 1
     return result
@@ -381,12 +584,14 @@ def main(argv=None):
         "weak": lambda: cli.cmd_weak(use_json),
         "due": lambda: cli.cmd_due(use_json),
         "plan": lambda: cli.cmd_plan(use_json),
-        "reset": lambda: cli.cmd_reset(use_json),
-        "export": lambda: cli.cmd_export(use_json),
+        "reset": lambda: cli.cmd_reset(rest, use_json),
+        "export": lambda: cli.cmd_export(rest, use_json),
     }
 
     if cmd in dispatch:
-        dispatch[cmd]()
+        result = dispatch[cmd]()
+        if isinstance(result, int):
+            return result
     elif cmd == "topic-info":
         if not rest:
             if use_json:

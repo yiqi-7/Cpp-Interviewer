@@ -37,7 +37,13 @@ def test_compatibility_skills_do_not_use_platform_specific_tools():
             assert token not in content
 
 
-def test_copilot_and_gemini_shims_point_to_core_skill():
+def test_root_documentation_stays_compact():
+    """The repo root should keep one README and avoid duplicate agent docs."""
+    for path in ("CLAUDE.md", "GEMINI.md", "README_EN.md"):
+        assert not (REPO_ROOT / path).exists()
+
+
+def test_copilot_shim_and_readme_point_to_core_skill():
     """Instruction-only agents should reuse the same core skill."""
     assert "skills/cpp-interviewer/SKILL.md" in _read(".github/copilot-instructions.md")
-    assert "skills/cpp-interviewer/SKILL.md" in _read("GEMINI.md")
+    assert "skills/cpp-interviewer/SKILL.md" in _read("README.md")

@@ -63,7 +63,7 @@ python setup.py --agents codex,cursor,claude
 python setup.py --skills-dir /path/to/your/agent/skills
 ```
 
-安装后重启对应 Agent。在支持 slash skill 的环境中输入 `/`，即可看到 `interview` 和 `coach`。不支持 slash skill 的 Agent 可以读取仓库内的 `.github/copilot-instructions.md`、`GEMINI.md`，或直接引用 `skills/cpp-interviewer/SKILL.md`。
+安装后重启对应 Agent。在支持 slash skill 的环境中输入 `/`，即可看到 `interview` 和 `coach`。不支持 slash skill 的 Agent 可以读取仓库内的 `.github/copilot-instructions.md`，或直接引用 `skills/cpp-interviewer/SKILL.md`。
 
 ### 两种模式
 
@@ -88,6 +88,8 @@ python setup.py --skills-dir /path/to/your/agent/skills
 /coach due             # 复习到期内容
 /coach status          # 查看掌握度
 /coach plan            # 生成今日计划
+/coach export          # 导出训练数据
+/coach reset           # 重置本地训练状态
 /coach start           # 进入训练循环
 ```
 
@@ -118,6 +120,8 @@ python -m pytest -q
 python -m coach.cli status
 python -m coach.cli topic search 虚函数 --json
 python -m coach.cli topic-context cpp_vtable --json
+python -m coach.cli export --format md --output coach-export.md
+python -m coach.cli reset --yes
 ```
 
 如需安装 `coach` / `cpp-coach` console script，可运行 `python setup.py develop`。
@@ -134,15 +138,35 @@ Cpp-Interviewer/
 │   ├── interview/            # /interview 兼容入口
 │   └── coach/                # /coach 兼容入口 + Python 后端
 ├── .github/copilot-instructions.md
-├── GEMINI.md
 ├── setup.py
 └── tests/
 ```
 
-### 当前限制
+### 导出与重置
 
-- `/coach reset` 和 `/coach export` 尚未实现。
-- `Gemini`、`Copilot` 等 instruction-only Agent 通常不会自动注册 slash command，需要在对应工具中显式引用仓库说明或核心 `SKILL.md`。
+`/coach` 的训练状态可以导出或重置：
+
+```bash
+python -m coach.cli export --format json --output coach-export.json
+python -m coach.cli export --format md --output coach-export.md
+python -m coach.cli export --format txt --output coach-export.txt
+python -m coach.cli export --format doc --output coach-export.doc
+python -m coach.cli reset --yes
+```
+
+`reset` 只清空本地训练状态，不删除知识索引。`doc` 导出为 Word 可打开的 HTML 文档。
+
+### Instruction-only Agent 用法
+
+`Gemini`、`Copilot` 等 instruction-only Agent 通常不会自动注册 slash command。可直接让它们读取核心 skill：
+
+```text
+请读取 skills/cpp-interviewer/SKILL.md，并按 /interview 模式回答：虚函数是怎么实现的？
+```
+
+```text
+请读取 skills/cpp-interviewer/SKILL.md，并按 /coach 模式训练我：虚函数
+```
 
 ## Star History
 
@@ -214,7 +238,7 @@ Common targets:
 | Claude Code | `~/.claude/skills/` |
 | Generic agent skills | `~/.agents/skills/` |
 
-For instruction-only agents, use `.github/copilot-instructions.md`, `GEMINI.md`, or point the agent at `skills/cpp-interviewer/SKILL.md`.
+For instruction-only agents, use `.github/copilot-instructions.md` or point the agent at `skills/cpp-interviewer/SKILL.md`.
 
 ### Usage
 
@@ -225,6 +249,8 @@ For instruction-only agents, use `.github/copilot-instructions.md`, `GEMINI.md`,
 /coach weak
 /coach status
 /coach plan
+python -m coach.cli export --format md --output coach-export.md
+python -m coach.cli reset --yes
 ```
 
 ### State
@@ -244,9 +270,28 @@ python -m pytest -q
 python -m coach.cli status
 python -m coach.cli topic search virtual_function --json
 python -m coach.cli topic-context cpp_vtable --json
+python -m coach.cli export --format md --output coach-export.md
+python -m coach.cli reset --yes
 ```
 
 Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console scripts.
+
+### Export And Reset
+
+Coach state can be exported as JSON, Markdown, plain text, or a Word-openable `.doc` file:
+
+```bash
+python -m coach.cli export --format json --output coach-export.json
+python -m coach.cli export --format md --output coach-export.md
+python -m coach.cli export --format txt --output coach-export.txt
+python -m coach.cli export --format doc --output coach-export.doc
+```
+
+Reset clears only local training state and keeps the knowledge index:
+
+```bash
+python -m coach.cli reset --yes
+```
 
 ## Star History
 

@@ -9,6 +9,8 @@ Use this mode for active interview practice. The coach asks one question, waits 
 - `due`: train due review topics from `python -m coach.cli due --json`.
 - `status`: show the mastery dashboard from `python -m coach.cli status --json`.
 - `plan`: show today's plan from `python -m coach.cli plan --json`.
+- `reset`: reset local training state only after explicit user confirmation; run `python -m coach.cli reset --yes --json`. The knowledge index must remain intact.
+- `export`: let the user choose `md`, `doc`, `txt`, or `json`; if no path is given, use `coach-export.<format>`. Run `python -m coach.cli export --format <format> --output <path> --json`.
 - Any other text: treat as a topic keyword and resolve it with `python -m coach.cli topic search "<keyword>" --json`.
 
 ## Training Loop
