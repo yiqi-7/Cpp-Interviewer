@@ -458,20 +458,21 @@ class CoachDB:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        # total 来自 qa_history，mastered/weak/avg_mastery 来自 knowledge_record
+        # total 来自 knowledge_record，total_questions 来自 qa_history
         cursor.execute(
             """
-            SELECT COUNT(*) as total
+            SELECT COUNT(*) as total_questions
             FROM qa_history
             WHERE user_id = ?
             """,
             (user_id,),
         )
-        total_row = cursor.fetchone()
+        question_row = cursor.fetchone()
 
         cursor.execute(
             """
             SELECT
+                COUNT(*) as total,
                 SUM(CASE WHEN mastery_level >= 0.8 THEN 1 ELSE 0 END) as mastered,
                 SUM(CASE WHEN mastery_level < 0.6 THEN 1 ELSE 0 END) as weak,
                 AVG(mastery_level) as avg_mastery
@@ -484,7 +485,8 @@ class CoachDB:
         conn.close()
 
         return {
-            "total": total_row["total"] or 0,
+            "total": mastery_row["total"] or 0,
+            "total_questions": question_row["total_questions"] or 0,
             "mastered": mastery_row["mastered"] or 0,
             "weak": mastery_row["weak"] or 0,
             "avg_mastery": mastery_row["avg_mastery"] or 0.0,

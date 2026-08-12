@@ -29,25 +29,46 @@ FREQUENCY_MAP = {
 }
 
 
+def _user_data_dir() -> Path:
+    """Return the agent-neutral user data directory."""
+    env = os.environ.get("CPP_INTERVIEWER_HOME")
+    if env:
+        return Path(env)
+    return Path.home() / ".cpp-interviewer"
+
+
 def _default_db_path() -> str:
-    """三层 fallback 确定 DB 路径。"""
-    env = os.environ.get("COACH_DB_PATH")
+    """Resolve the SQLite DB path using portable environment variables first."""
+    env = os.environ.get("CPP_INTERVIEWER_DB") or os.environ.get("COACH_DB_PATH")
     if env:
         return env
-    user_path = Path.home() / ".claude" / "coach" / "data" / "coach.sqlite"
-    return str(user_path)
+    return str(_user_data_dir() / "coach.sqlite")
 
 
 def _default_index_path() -> str:
-    """三层 fallback 确定知识索引路径。"""
-    env = os.environ.get("COACH_INDEX_PATH")
+    """Resolve knowledge_index.json without assuming a specific agent."""
+    env = os.environ.get("CPP_INTERVIEWER_INDEX") or os.environ.get("COACH_INDEX_PATH")
     if env:
         return env
-    # skill 安装目录
-    skill_index = Path.home() / ".claude" / "skills" / "coach" / "index" / "knowledge_index.json"
-    if skill_index.exists():
-        return str(skill_index)
-    return "index/knowledge_index.json"
+
+    repo_root = Path(__file__).resolve().parent.parent
+    candidates = [
+        repo_root / "index" / "knowledge_index.json",
+        repo_root / "skills" / "cpp-interviewer" / "index" / "knowledge_index.json",
+    ]
+
+    for agent_dir in (".codex", ".claude", ".cursor"):
+        candidates.extend(
+            [
+                Path.home() / agent_dir / "skills" / "cpp-interviewer" / "index" / "knowledge_index.json",
+                Path.home() / agent_dir / "skills" / "coach" / "index" / "knowledge_index.json",
+            ]
+        )
+
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return str(repo_root / "index" / "knowledge_index.json")
 
 
 DEFAULT_DB_PATH = _default_db_path()

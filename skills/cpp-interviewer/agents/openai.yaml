@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cpp Interviewer"
+  short_description: "C++ 面试讲解、追问训练与掌握度追踪"
+  default_prompt: "Use $cpp-interviewer to explain a C++ interview topic or run one-question-at-a-time practice."

@@ -50,6 +50,14 @@ def daily_star_counts(entries: Iterable[dict]) -> list[tuple[date, int]]:
     return result
 
 
+def load_entries(stream) -> list[dict]:
+    """Load stargazer entries from a JSON stream."""
+    payload = json.load(stream)
+    if not isinstance(payload, list):
+        raise ValueError("Star history input must be a JSON list")
+    return payload
+
+
 def _theme_colors(theme: str) -> dict[str, str]:
     if theme == "dark":
         return {

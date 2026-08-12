@@ -74,8 +74,9 @@ class TestUpdateMastery:
         # update_knowledge_mastery 不创建 qa_history，所以 total 仍为 0
         # 但 knowledge_record 中应该有 1 条记录
         summary = temp_db.get_status_summary(user_id)
-        assert summary["total"] == 0  # total 来自 qa_history
+        assert summary["total"] == 1
         assert summary["weak"] == 1  # weak 来自 knowledge_record
+        assert summary["total_questions"] == 0
 
     def test_low_confidence_penalty(self, temp_db):
         """低置信度评估应该惩罚 delta。"""
@@ -141,7 +142,8 @@ class TestSaveQA:
 
         # 验证 user_state 计数
         summary = temp_db.get_status_summary(user_id)
-        assert summary["total"] == 1
+        assert summary["total"] == 0
+        assert summary["total_questions"] == 1
 
         # 验证 qa_history 中的 final_rating 和 score_total 被正确保存
         conn = get_connection(temp_db.db_path)
@@ -235,6 +237,7 @@ class TestQueryMethods:
         """不存在的用户返回零值。"""
         summary = temp_db.get_status_summary("nonexistent")
         assert summary["total"] == 0
+        assert summary["total_questions"] == 0
         assert summary["mastered"] == 0
         assert summary["weak"] == 0
         assert summary["avg_mastery"] == 0.0

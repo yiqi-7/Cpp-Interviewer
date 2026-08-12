@@ -2,6 +2,16 @@
 
 > 你的 C++ 面试学习伙伴 — 弱项驱动训练、精准诊断、系统化复习
 
+## Agent Skills 结构
+
+核心 skill 是 agent-neutral 的 `skills/cpp-interviewer/SKILL.md`：
+
+- `skills/cpp-interviewer/references/interview-mode.md`：讲解模式
+- `skills/cpp-interviewer/references/coach-mode.md`：训练模式
+- `skills/cpp-interviewer/references/knowledge-schema.md`：知识索引 schema
+
+`skills/interview/SKILL.md` 和 `skills/coach/SKILL.md` 是 slash command 兼容入口。后续优化核心行为时优先修改 `skills/cpp-interviewer/`，入口文件只保留轻量转发规则。
+
 ## 快速开始
 
 ```bash
@@ -16,6 +26,9 @@ python -m coach.cli status
 
 # 生成今日计划
 python -m coach.cli plan
+
+# 搜索知识点
+python -m coach.cli topic search 虚函数 --json
 ```
 
 ## 命令
@@ -28,6 +41,16 @@ python -m coach.cli plan
 | `/coach due` | 只训练到期需要复习的知识点 |
 | `/coach status` | 查看掌握度仪表盘 |
 | `/coach plan` | 生成今日训练计划 |
+
+## 可移植路径
+
+状态和索引路径优先使用：
+
+| 环境变量 | 用途 |
+|---------|------|
+| `CPP_INTERVIEWER_HOME` | 用户数据目录，默认 `~/.cpp-interviewer` |
+| `CPP_INTERVIEWER_DB` | SQLite 数据库路径 |
+| `CPP_INTERVIEWER_INDEX` | `knowledge_index.json` 路径 |
 
 ## 核心特性
 
@@ -72,20 +95,17 @@ delta = 0.12 × (score_total - 0.6)
 
 ```
 Cpp-Interviewer/
-├── coach/
-│   ├── __init__.py
-│   ├── config.py      # 配置常量
-│   ├── models.py      # 数据类
-│   ├── db.py          # SQLite 状态层
-│   ├── scheduler.py   # 选题调度器
-│   └── cli.py         # CLI 入口
 ├── skills/
-│   ├── coach/SKILL.md       # /coach 命令入口
+│   ├── cpp-interviewer/     # agent-neutral 核心 skill
+│   ├── coach/
+│   │   ├── SKILL.md         # /coach 命令入口
+│   │   ├── coach/           # Python 持久化后端
+│   │   └── index/
 │   └── interview/
 │       ├── SKILL.md         # /interview 模式
 │       ├── COACH_SKILL.md   # coach 被动模式
 │       └── shared_rules.md  # 公共面试规则
-└── data/coach.sqlite        # 状态存储
+└── setup.py                 # 多 Agent 安装入口
 ```
 
 ## 使用限制

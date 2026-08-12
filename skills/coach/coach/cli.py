@@ -33,6 +33,7 @@ class CoachCLI:
             _print_json(summary)
         else:
             print(f"总知识点数: {summary['total']}")
+            print(f"答题记录数: {summary['total_questions']}")
             print(f"已掌握: {summary['mastered']}")
             print(f"薄弱: {summary['weak']}")
             print(f"平均掌握度: {summary['avg_mastery']:.1%}")
@@ -70,6 +71,42 @@ class CoachCLI:
                 print(f"  {i}. {t['topic_name']} (薄弱, 掌握度 {t['mastery_level']:.1%})")
             for i, t in enumerate(due[:2], len(weak) + 1):
                 print(f"  {i}. {t['topic_name']} (到期复习)")
+
+    def cmd_topic(self, topic: str, json_output=False):
+        self.cmd_topic_info(topic, json_output)
+
+    def cmd_topic_search(self, keyword: str, json_output=False):
+        needle = keyword.strip().lower()
+        matches = []
+        if needle:
+            for topic in self.scheduler.index.get("topics", []):
+                topic_id = topic.get("id") or topic.get("topic_id", "")
+                topic_name = topic.get("name") or topic.get("topic_name", topic_id)
+                keywords = topic.get("keywords", [])
+                haystack = [topic_id.lower(), topic_name.lower()]
+                haystack.extend(str(k).lower() for k in keywords)
+                if any(needle in item for item in haystack):
+                    matches.append(
+                        {
+                            "topic_id": topic_id,
+                            "topic_name": topic_name,
+                            "domain": topic.get("domain", ""),
+                            "keywords": keywords,
+                            "interview_frequency": topic.get("interview_frequency", "medium"),
+                            "related_topics": topic.get("related_topics", []),
+                        }
+                    )
+
+        result = {"query": keyword, "matches": matches}
+        if json_output:
+            _print_json(result)
+        else:
+            if not matches:
+                print("没有匹配到知识点")
+                return 0
+            for item in matches:
+                print(f"{item['topic_id']}\t{item['topic_name']}")
+        return 0
 
     def cmd_topic_info(self, topic: str, json_output=False):
         from .db import get_connection
@@ -126,7 +163,7 @@ class CoachCLI:
                 _print_json({"error": "missing --topic-id"})
             else:
                 print("缺少 --topic-id")
-            return
+            return 1
 
         try:
             eval_data = json.loads(eval_json_str)
@@ -135,7 +172,7 @@ class CoachCLI:
                 _print_json({"error": "invalid --evaluation JSON"})
             else:
                 print("无效的 --evaluation JSON")
-            return
+            return 1
 
         topic_name = topic_id
         for t in self.scheduler.index.get("topics", []):
@@ -185,10 +222,24 @@ class CoachCLI:
             _print_json(result)
         else:
             print(f"已保存 (qa_id={qa_id}), 新掌握度: {new_mastery:.1%}")
+        return 0
 
     def cmd_next_topic(self, args, json_output=False):
         parsed = _parse_named_args(args)
-        target_diff = int(parsed.get("difficulty", "2"))
+        try:
+            target_diff = int(parsed.get("difficulty", "2"))
+        except ValueError:
+            if json_output:
+                _print_json({"error": "invalid --difficulty"})
+            else:
+                print("无效的 --difficulty")
+            return 1
+        if target_diff not in (1, 2, 3):
+            if json_output:
+                _print_json({"error": "--difficulty must be 1, 2, or 3"})
+            else:
+                print("--difficulty 必须是 1、2 或 3")
+            return 1
 
         weak = self.db.get_weak_topics("default", limit=10)
         due = self.db.get_due_topics("default")
@@ -217,6 +268,7 @@ class CoachCLI:
                 print(chosen["error"])
             else:
                 print(f"推荐: {chosen['topic_name']} (掌握度 {chosen['mastery_level']:.1%})")
+        return 0
 
     def cmd_reset(self, json_output=False):
         if json_output:
@@ -240,7 +292,7 @@ class CoachCLI:
                 _print_json({"error": "missing topic id or keyword"})
             else:
                 print("用法: topic-context <topic_id_or_keyword>")
-            return
+            return 1
 
         query = args[0].lower()
         match = None
@@ -257,7 +309,7 @@ class CoachCLI:
                 _print_json({"error": f"topic not found: {args[0]}"})
             else:
                 print(f"未找到 topic: {args[0]}")
-            return
+            return 1
 
         related_ids = match.get("related_topics", []) or []
         related_names = []
@@ -286,6 +338,7 @@ class CoachCLI:
             print(f"Keywords: {', '.join(result['keywords'])}")
             print(f"Related: {', '.join(result['related_topic_names'])}")
             print(f"Frequency: {result['interview_frequency']}")
+        return 0
 
 
 def _print_json(data):
@@ -314,7 +367,7 @@ def main(argv=None):
 
     if len(argv) < 1:
         print("用法: coach <command> [args] [--json]")
-        print("命令: status, weak, due, plan, topic-info <id>, topic-context <id>, save-result ..., next-topic, reset, export")
+        print("命令: coach start, topic <id>, topic search <keyword>, topic-info <id>, topic-context <id>, status, weak, due, plan, save-result ..., next-topic, reset, export")
         return 0
 
     repo_path = Path(__file__).parent.parent
@@ -349,11 +402,30 @@ def main(argv=None):
             else:
                 print("用法: topic-context <topic_id_or_keyword>")
             return 1
-        cli.cmd_topic_context(rest, use_json)
+        return cli.cmd_topic_context(rest, use_json)
+    elif cmd == "topic":
+        if not rest:
+            if use_json:
+                _print_json({"error": "missing topic"})
+            else:
+                print("用法: topic <topic>")
+            return 1
+        if rest[0] == "search":
+            if len(rest) < 2:
+                if use_json:
+                    _print_json({"error": "missing keyword"})
+                else:
+                    print("用法: topic search <keyword>")
+                return 1
+            return cli.cmd_topic_search(rest[1], use_json)
+        if use_json:
+            cli.cmd_topic(rest[0], use_json)
+        else:
+            cli.cmd_topic(rest[0])
     elif cmd == "save-result":
-        cli.cmd_save_result(rest, use_json)
+        return cli.cmd_save_result(rest, use_json)
     elif cmd == "next-topic":
-        cli.cmd_next_topic(rest, use_json)
+        return cli.cmd_next_topic(rest, use_json)
     else:
         if use_json:
             _print_json({"error": f"未知命令: {cmd}"})

@@ -2,12 +2,12 @@
 
 # Cpp-Interviewer
 
-**C++ 面试学习伙伴 — 学 + 练，双模式覆盖**
+**C++ 面试学习伙伴 — 学 + 练，下载后可直接交给 Agent 使用**
 
 [中文](#中文) | [English](#english)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Claude%20Code-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-Agent%20Skills-lightgrey.svg)
 
 </div>
 
@@ -19,148 +19,36 @@
 
 ### 简介
 
-C++ 面试学习伙伴，提供学 + 练双模式。
+Cpp-Interviewer 是一个面向主流 Agent 的 C++ 面试 skill 项目，提供学 + 练双模式：
 
-- **`/interview` 直接给精炼答案**：默认简洁模式（300-800 字），不模拟面试、不反问，覆盖 C++ 语言、STL、操作系统、计算机网络、数据库等高频考点
-- **`/coach` 模拟面试官追问**：像真实面试一样出题 → 等你回答 → 六维度评价 → 持续追问挖薄弱点
-- **直接使用当前 agent 作为 LLM**，无需任何 API Key
-- **无需 PDF 资料**，无需安装 Git LFS，下载后直接使用
+- **`/interview` 直接给精炼答案**：默认简洁模式，不模拟面试、不反问，覆盖 C++、STL、操作系统、网络、数据库等高频考点。
+- **`/coach` 模拟面试官追问**：出题 → 等你回答 → 六维度评价 → 记录掌握度 → 继续追问薄弱点。
+- **无需 API Key**：直接使用当前 Agent 作为 LLM。
+- **无需 PDF/Git LFS**：内置知识索引，clone 后即可安装使用。
+- **Agent 中立**：核心 skill 可被 Codex、Claude Code、Cursor、Gemini、Copilot 等 Agent 复用。
 
-### 两种模式
+### 让 Agent 直接安装
 
-| 入口 | 模式 | 核心定位 | 示例 |
-|------|------|---------|------|
-| `/interview` | 知识讲解（学） | 直接给精炼答案，适合快速复习 | `/interview 虚函数是怎么实现的` |
-| `/coach` | 面试训练（练） | 模拟面试官，追问式训练 | `/coach 虚函数`、`/coach weak` |
+把下面这段发给你的本地 Agent 即可：
 
-```
-/interview = 教学讲解（学，直接给答案）
-/coach     = 面试训练（练，追问式）
-```
-
-### 使用方式
-
-#### 讲解模式（/interview）
-
-```
-/interview 虚函数是怎么实现的
-/interview 智能指针有哪几种
-/interview 什么是内存泄漏
+```text
+请安装 Cpp-Interviewer：
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+cd Cpp-Interviewer
+python setup.py --agents all
+安装后重启当前 Agent，并用 /interview 或 /coach 测试。
 ```
 
-#### 训练模式（/coach）
+默认安装到常见 skills 目录：
 
-```
-/coach 虚函数          # 专项训练：虚函数
-/coach 智能指针         # 专项训练：智能指针
-/coach weak            # 训练薄弱知识点
-/coach status          # 查看掌握度仪表盘
-/coach plan            # 生成今日训练计划
-/coach start           # 进入训练循环
-```
+| Agent | 安装目录 |
+|------|----------|
+| Codex / ChatGPT | `~/.codex/skills/` |
+| Cursor | `~/.cursor/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| 通用 Agent skills 目录 | `~/.agents/skills/` |
 
-`/coach` 会像面试官一样：**出题 → 等你回答 → 评价 → 追问 → 下一题**。
-
-#### 训练模式交互示例
-
-**专项训练 `/coach 虚函数`**
-
-```
-你：/coach 虚函数
-
-教练：专项训练：vtable
-      掌握度：2.4%
-      难度：基础
-
-      第 1 题：
-      什么是虚函数表（vtable）？每个包含虚函数的类和它的对象分别与 vtable 是什么关系？
-
-你：虚函数表是一个函数指针数组，编译器为每个含虚函数的类生成一张表。类共享一张 vtable，对象通过 vptr 指向它。
-
-教练：评价：概念基本正确，但遗漏了 vptr 的存储位置和继承场景下的表合并规则。
-      薄弱点：vptr 布局、多重继承
-      掌握度更新：2.4% → 12%
-
-      第 2 题：
-      多重继承下，一个对象会有几个 vptr？编译器如何决定调用哪个虚函数？
-```
-
-**薄弱训练 `/coach weak`**
-
-```
-你：/coach weak
-
-教练：当前薄弱点：vtable（掌握度 12%）
-      开始训练...
-
-      第 1 题：
-      虚析构函数的作用是什么？如果基类析构函数不是虚函数，delete 派生类指针会发生什么？
-```
-
-**掌握度仪表盘 `/coach status`**
-
-```
-你：/coach status
-
-教练：📊 掌握度仪表盘
-      ──────────────────────────
-      总知识点：15    已掌握：2
-      薄弱：8       平均掌握度：23%
-      ──────────────────────────
-      ▓▓▓░░░░░░░  虚函数       35%
-      ▓▓░░░░░░░░  智能指针     20%
-      ▓░░░░░░░░░  vtable       12%
-      ░░░░░░░░░░  内存管理      5%
-      ...
-```
-
-**今日计划 `/coach plan`**
-
-```
-你：/coach plan
-
-教练：📋 今日训练计划
-      ──────────────────────────
-      复习（到期）：
-        1. vtable — 上次训练 3 天前，建议复习
-      新增（薄弱）：
-        2. 内存管理 — 掌握度 5%
-        3. 多线程锁 — 掌握度 8%
-      ──────────────────────────
-      输入 /coach 开始按计划训练
-```
-
-**进入训练循环 `/coach start`**
-
-```
-你：/coach start
-
-教练：你想训练哪个方向？
-      - 直接说知识点名称（如"虚函数"、"智能指针"）
-      - weak：训练薄弱知识点
-      - due：复习到期内容
-
-你：虚函数
-
-教练：专项训练：虚函数
-      掌握度：35%
-      难度：中等
-
-      第 1 题：
-      虚函数的动态绑定在编译期和运行期分别做了什么？如果不用虚函数，还有什么方式实现多态？
-```
-
-### 核心特性
-
-- **面试官视角**：引导思考，不直接给答案
-- **弱项驱动训练**：自动优先训练最薄弱知识点
-- **六维度精准诊断**：correctness、completeness、depth、clarity、code_accuracy、edge_case_awareness
-- **追问式训练**：根据你的回答持续追问，挖掘薄弱点
-- **SQLite 状态持久化**：掌握度、QA 历史自动存储
-
-### 安装方式
-
-#### 方式一：克隆 + 自动安装（推荐）
+只安装到当前 Codex：
 
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
@@ -168,47 +56,94 @@ cd Cpp-Interviewer
 python setup.py
 ```
 
-安装后重启 Claude Code，输入 `/` 即可看到 `interview` 和 `coach`。
-
-#### 方式二：手动安装
+指定目标或自定义目录：
 
 ```bash
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+python setup.py --agents codex,cursor,claude
+python setup.py --skills-dir /path/to/your/agent/skills
 ```
 
-将 `skills/interview/` 和 `skills/coach/` 两个文件夹复制到 `~/.claude/skills/` 下：
+安装后重启对应 Agent。在支持 slash skill 的环境中输入 `/`，即可看到 `interview` 和 `coach`。不支持 slash skill 的 Agent 可以读取仓库内的 `.github/copilot-instructions.md`、`GEMINI.md`，或直接引用 `skills/cpp-interviewer/SKILL.md`。
 
+### 两种模式
+
+| 入口 | 模式 | 核心定位 | 示例 |
+|------|------|----------|------|
+| `/interview` | 知识讲解（学） | 直接给高密度答案，适合快速复习 | `/interview 虚函数是怎么实现的` |
+| `/coach` | 面试训练（练） | 一次一题，追问式训练 | `/coach 虚函数`、`/coach weak` |
+
+#### `/interview` 示例
+
+```text
+/interview 虚函数是怎么实现的
+/interview 智能指针有哪几种
+/interview 什么是内存泄漏
 ```
-~/.claude/skills/
-├── interview/
-│   ├── SKILL.md
-│   └── index/knowledge_index.json
-└── coach/
-    ├── SKILL.md
-    ├── coach/                # Python 持久化后端
-    │   ├── cli.py
-    │   ├── db.py
-    │   ├── scheduler.py
-    │   └── ...
-    └── index/knowledge_index.json
+
+#### `/coach` 示例
+
+```text
+/coach 虚函数          # 专项训练
+/coach weak            # 训练薄弱知识点
+/coach due             # 复习到期内容
+/coach status          # 查看掌握度
+/coach plan            # 生成今日计划
+/coach start           # 进入训练循环
 ```
 
-### 注意事项
+`/coach` 会像面试官一样：**出题 → 等你回答 → 评价 → 追问 → 下一题**。
 
-- **无需 PDF 资料即可使用**，默认基于内置知识点索引和当前 agent 的知识生成回答
-- `/coach reset` 和 `/coach export` 尚未实现
+### 状态和路径
 
-### 开发者调试方式
+训练状态默认保存在 `~/.cpp-interviewer/coach.sqlite`。可用环境变量覆盖：
 
 ```bash
-# 从 skills/coach/ 目录运行
-cd skills/coach
+export CPP_INTERVIEWER_HOME="$HOME/.cpp-interviewer"
+export CPP_INTERVIEWER_DB="$HOME/.cpp-interviewer/coach.sqlite"
+export CPP_INTERVIEWER_INDEX="/path/to/knowledge_index.json"
+```
+
+Windows PowerShell：
+
+```powershell
+$env:CPP_INTERVIEWER_HOME="$HOME\.cpp-interviewer"
+$env:CPP_INTERVIEWER_DB="$HOME\.cpp-interviewer\coach.sqlite"
+$env:CPP_INTERVIEWER_INDEX="C:\path\to\knowledge_index.json"
+```
+
+### 开发者调试
+
+```bash
+python -m pytest -q
 python -m coach.cli status
-python -m coach.cli topic 虚函数
-
-# 或者使用安装脚本
-python setup.py
+python -m coach.cli topic search 虚函数 --json
+python -m coach.cli topic-context cpp_vtable --json
 ```
+
+如需安装 `coach` / `cpp-coach` console script，可运行 `python setup.py develop`。
+
+### 项目结构
+
+```text
+Cpp-Interviewer/
+├── skills/
+│   ├── cpp-interviewer/      # agent-neutral 核心 skill
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   └── references/
+│   ├── interview/            # /interview 兼容入口
+│   └── coach/                # /coach 兼容入口 + Python 后端
+├── .github/copilot-instructions.md
+├── GEMINI.md
+├── setup.py
+└── tests/
+```
+
+### 当前限制
+
+- `/coach reset` 和 `/coach export` 尚未实现。
+- `Gemini`、`Copilot` 等 instruction-only Agent 通常不会自动注册 slash command，需要在对应工具中显式引用仓库说明或核心 `SKILL.md`。
+
 ## Star History
 
 <a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
@@ -235,148 +170,27 @@ python setup.py
 
 ### Introduction
 
-Simulates an interviewer to help you prepare for C++ interviews.
+Cpp-Interviewer is an agent-neutral C++ interview skill with two modes:
 
-- **No direct answers** — guides your thinking, asks follow-up questions, highlights pitfalls
-- **No PDF required** — works out of the box with built-in knowledge index
-- **No API key required** — uses the host agent as LLM
-- **Two modes** — learn + practice
+- **`/interview`**: concise, direct explanations for C++ and CS interview topics.
+- **`/coach`**: one-question-at-a-time interview practice with six-dimension evaluation and SQLite mastery tracking.
+- **No API key required**: the host agent is the LLM.
+- **No PDF or Git LFS required**: it works with the built-in knowledge index after clone.
+- **Portable across agents**: Codex, Claude Code, Cursor, Gemini, Copilot, and other tools can reuse the same core skill.
 
-### Two Modes
+### Agent-Friendly Install
 
-| Entry | Purpose | Example |
-|-------|---------|---------|
-| `/interview` | Teaching | `/interview How are virtual functions implemented` |
-| `/coach` | Training | `/coach virtual_function`, `/coach weak` |
+Give this to your local agent:
 
-```
-/interview = teaching (learn)
-/coach = interview training (practice)
-```
-
-### Usage
-
-#### Teaching Mode (/interview)
-
-```
-/interview How are virtual functions implemented
-/interview What types of smart pointers are there
-/interview What is a memory leak
+```text
+Install Cpp-Interviewer:
+git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+cd Cpp-Interviewer
+python setup.py --agents all
+Restart the target agent, then test /interview or /coach.
 ```
 
-#### Training Mode (/coach)
-
-```
-/coach virtual_function    # Train specific topic
-/coach smart_pointer       # Train specific topic
-/coach weak               # Train weak topics
-/coach status             # View mastery dashboard
-/coach plan               # Generate today's training plan
-/coach start              # Enter training loop
-```
-
-`/coach` acts like an interviewer: **ask → wait for your answer → evaluate → follow-up → next question**.
-
-#### Training Mode Interaction Examples
-
-**Specific Topic `/coach virtual_function`**
-
-```
-You: /coach virtual_function
-
-Coach: Training: vtable
-       Mastery: 2.4%
-       Difficulty: Basic
-
-       Q1:
-       What is a vtable? What's the relationship between a class with virtual functions, its objects, and the vtable?
-
-You: A vtable is an array of function pointers. The compiler generates one per class with virtual functions. Objects point to it via vptr.
-
-Coach: Evaluation: Core concept correct, but missed vptr storage layout and inheritance table merging rules.
-       Weakness: vptr layout, multiple inheritance
-       Mastery update: 2.4% → 12%
-
-       Q2:
-       Under multiple inheritance, how many vptrs does an object have? How does the compiler resolve virtual function calls?
-```
-
-**Weak Topics `/coach weak`**
-
-```
-You: /coach weak
-
-Coach: Current weakness: vtable (mastery 12%)
-       Starting training...
-
-       Q1:
-       What's the purpose of a virtual destructor? What happens if you delete a derived class pointer through a non-virtual base destructor?
-```
-
-**Mastery Dashboard `/coach status`**
-
-```
-You: /coach status
-
-Coach: 📊 Mastery Dashboard
-       ──────────────────────────
-       Total: 15    Mastered: 2
-       Weak: 8      Avg Mastery: 23%
-       ──────────────────────────
-       ▓▓▓░░░░░░░  Virtual Functions   35%
-       ▓▓░░░░░░░░  Smart Pointers      20%
-       ▓░░░░░░░░░  vtable              12%
-       ░░░░░░░░░░  Memory Mgmt          5%
-       ...
-```
-
-**Training Plan `/coach plan`**
-
-```
-You: /coach plan
-
-Coach: 📋 Today's Training Plan
-       ──────────────────────────
-       Review (due):
-         1. vtable — last trained 3 days ago, recommended review
-       New (weak):
-         2. Memory Management — mastery 5%
-         3. Thread Locks — mastery 8%
-       ──────────────────────────
-       Type /coach to start training
-```
-
-**Training Loop `/coach start`**
-
-```
-You: /coach start
-
-Coach: What topic would you like to train?
-       - Type a topic name (e.g. "virtual_function", "smart_pointer")
-       - weak: train weak topics
-       - due: review due content
-
-You: virtual_function
-
-Coach: Training: Virtual Functions
-       Mastery: 35%
-       Difficulty: Intermediate
-
-       Q1:
-       What happens at compile time vs runtime for dynamic binding of virtual functions? Besides virtual functions, what other ways can achieve polymorphism?
-```
-
-### Core Features
-
-- **Interviewer perspective**: Guides thinking, no direct answers
-- **Weakness-driven training**: Automatically prioritizes weakest topics
-- **Six-dimension precise diagnosis**: correctness, completeness, depth, clarity, code_accuracy, edge_case_awareness
-- **Follow-up based training**: Continues questioning based on your answers to dig out weak points
-- **SQLite state persistence**: Mastery, QA history automatically stored
-
-### Installation
-
-#### Option 1: Clone + Auto Install (Recommended)
+Install only to Codex:
 
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
@@ -384,45 +198,56 @@ cd Cpp-Interviewer
 python setup.py
 ```
 
-After installation, restart Claude Code. Type `/` to see `interview` and `coach`.
-
-#### Option 2: Manual Install
+Choose targets or a custom skills directory:
 
 ```bash
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git
+python setup.py --agents codex,cursor,claude
+python setup.py --skills-dir /path/to/your/agent/skills
 ```
 
-Copy `skills/interview/` and `skills/coach/` to `~/.claude/skills/`:
+Common targets:
 
+| Agent | Skills directory |
+|-------|------------------|
+| Codex / ChatGPT | `~/.codex/skills/` |
+| Cursor | `~/.cursor/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| Generic agent skills | `~/.agents/skills/` |
+
+For instruction-only agents, use `.github/copilot-instructions.md`, `GEMINI.md`, or point the agent at `skills/cpp-interviewer/SKILL.md`.
+
+### Usage
+
+```text
+/interview How are virtual functions implemented
+/interview What types of smart pointers are there
+/coach virtual_function
+/coach weak
+/coach status
+/coach plan
 ```
-~/.claude/skills/
-├── interview/
-│   ├── SKILL.md
-│   └── index/knowledge_index.json
-└── coach/
-    ├── SKILL.md
-    ├── coach/                # Python 持久化后端
-    │   ├── cli.py
-    │   ├── db.py
-    │   ├── scheduler.py
-    │   └── ...
-    └── index/knowledge_index.json
-```
 
-### Notes
+### State
 
-- **Works without PDF resources** — default responses based on built-in knowledge index and host agent knowledge
-- **No API key required** — uses the host agent (Claude Code / Cursor etc.) as the LLM
-- `/coach reset` and `/coach export` are not yet implemented
-
-### Developer / Debug Mode
+Training state defaults to `~/.cpp-interviewer/coach.sqlite`. Override paths with:
 
 ```bash
-pip install -e .
-python -m pytest tests/ -v
+export CPP_INTERVIEWER_HOME="$HOME/.cpp-interviewer"
+export CPP_INTERVIEWER_DB="$HOME/.cpp-interviewer/coach.sqlite"
+export CPP_INTERVIEWER_INDEX="/path/to/knowledge_index.json"
+```
+
+### Developer Mode
+
+```bash
+python -m pytest -q
 python -m coach.cli status
-python -m coach.cli topic virtual_function
+python -m coach.cli topic search virtual_function --json
+python -m coach.cli topic-context cpp_vtable --json
 ```
+
+Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console scripts.
+
 ## Star History
 
 <a href="https://www.star-history.com/?repos=yiqi-7%2FCpp-Interviewer&type=date&legend=top-left">
@@ -436,7 +261,3 @@ python -m coach.cli topic virtual_function
 ### License
 
 This project is licensed under the [MIT License](https://github.com/yiqi-7/Cpp-Interviewer/blob/main/LICENSE).
-
-### Community
-
-- Recognized by [LINUX DO](https://linux.do/) community

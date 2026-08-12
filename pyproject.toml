@@ -9,6 +9,10 @@ dependencies = []
 coach = "coach.cli:main"
 cpp-coach = "coach.cli:main"
 
+[tool.setuptools.packages.find]
+where = ["skills/coach"]
+include = ["coach", "coach.*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["skills/coach", "."]
