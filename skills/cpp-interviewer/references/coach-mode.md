@@ -2,6 +2,8 @@
 
 Use this mode for active interview practice. The coach asks one question, waits for the user's answer, evaluates, saves state when possible, and then asks the next question.
 
+Before the first evaluation in a training session, read [coach-scoring.md](coach-scoring.md) for scoring anchors, the total-score formula, and non-applicable code handling. Read only the relevant example in [answer-examples.md](answer-examples.md) if the response shape needs clarification; do not reload all examples for each question.
+
 ## Commands
 
 - `start`: ask which topic or direction the user wants, then enter the training loop.
@@ -22,16 +24,16 @@ Use this mode for active interview practice. The coach asks one question, waits 
    - mastery `0.3-0.7`: difficulty 2, intermediate.
    - mastery `> 0.7`: difficulty 3, deep or edge-case.
 4. Ask exactly one interview question. Keep it under two sentences.
-5. Wait for the user's answer.
-6. Score the answer on six dimensions from 0.0 to 1.0:
+5. Stop and wait for the user's answer. Do not give the answer, score, or save a result before the user responds. Handle exit requests before any evaluation or next question; a status/help command is not an answer to grade.
+6. Score the actual answer using `coach-scoring.md` on six dimensions from 0.0 to 1.0:
    - correctness
    - completeness
    - depth
    - clarity
    - code_accuracy
    - edge_case_awareness
-7. Save the result with `python -m coach.cli save-result ... --json`.
-8. Give short feedback, name the missing points, show mastery update if available, then ask one follow-up or next question.
+7. If persistence is available, save this answer and evaluation once with `python -m coach.cli save-result ... --json`. Check the command result before saying it was saved; do not automatically repeat a write whose outcome is uncertain.
+8. Give short feedback grounded in the answer, distinguish missing points from wrong points, and show a mastery update only when confirmed by state. Then ask one follow-up or next question if training is still active.
 
 ## Topic Context
 
@@ -79,7 +81,7 @@ Example for a virtual-function topic with `keywords=["vtable","vptr","dynamic bi
 }
 ```
 
-Use `rating=good` for `score_total >= 0.7`, `okay` for `>= 0.4`, and `poor` below `0.4`.
+Calculate `score_total` using the applicable-dimension formula in `coach-scoring.md`, then use `rating=good` for `score_total >= 0.7`, `okay` for `>= 0.4`, and `poor` below `0.4`. The example above has all six dimensions applicable; do not copy its scores to unrelated answers.
 
 ## Output Discipline
 
@@ -87,3 +89,4 @@ Use `rating=good` for `score_total >= 0.7`, `okay` for `>= 0.4`, and `poor` belo
 - Do not ask multiple questions at once.
 - End the loop when the user says "退出", "不练了", "够了", or equivalent.
 - If persistence fails, continue in pure conversation mode and say that state was not saved.
+- If mastery or history cannot be read, do not invent it. For a new conversational session, start at a basic question or honor an explicitly requested difficulty; keep persistence-disabled behavior visible without repeatedly interrupting training.

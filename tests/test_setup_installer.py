@@ -1,5 +1,7 @@
 """Tests for the Cpp-Interviewer skill installer."""
 import os
+import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -8,13 +10,37 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
+def isolated_env(home, extra_env=None):
+    """Keep every subprocess away from the developer's installed skills/state."""
+    env = os.environ.copy()
+    for key in (
+        "CPP_INTERVIEWER_HOME", "CPP_INTERVIEWER_DB", "CPP_INTERVIEWER_INDEX",
+        "COACH_DB_PATH", "COACH_INDEX_PATH", "PYTHONPATH", "PYTHONHOME",
+    ):
+        env.pop(key, None)
+    env.update({
+        "USERPROFILE": str(home),
+        "HOME": str(home),
+        "CPP_INTERVIEWER_HOME": str(home / "data"),
+        "CPP_INTERVIEWER_DB": str(home / "data" / "coach.sqlite"),
+        "CPP_INTERVIEWER_INDEX": str(REPO_ROOT / "skills/coach/index/knowledge_index.json"),
+        "PYTHONNOUSERSITE": "1",
+        "PIP_NO_INDEX": "1",
+        "PIP_NO_BUILD_ISOLATION": "1",
+        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+    })
+    env.update(extra_env or {})
+    return env
+
+
 def run_setup(args, home, extra_env=None):
     return subprocess.run(
         [sys.executable, str(REPO_ROOT / "setup.py"), *args],
         cwd=REPO_ROOT,
-        env={**os.environ, "USERPROFILE": str(home), "HOME": str(home), **(extra_env or {})},
+        env=isolated_env(home, extra_env),
         text=True,
         capture_output=True,
+        timeout=120,
     )
 
 
@@ -81,6 +107,32 @@ def test_setup_installs_to_custom_skills_dir(tmp_path):
     assert (custom_dir / "coach" / "SKILL.md").exists()
 
 
+def test_installed_references_and_wrapper_links_are_complete(tmp_path):
+    """Installation must preserve the shared policy and its relative links."""
+    skills_dir = tmp_path / "portable-skills"
+    result = run_setup(["--skills-dir", str(skills_dir)], tmp_path)
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    source = REPO_ROOT / "skills/cpp-interviewer/references"
+    installed = skills_dir / "cpp-interviewer/references"
+    for reference in source.glob("*.md"):
+        target = installed / reference.name
+        assert target.read_bytes() == reference.read_bytes()
+
+    for entry in ("interview", "coach"):
+        wrapper = skills_dir / entry / "SKILL.md"
+        content = wrapper.read_text(encoding="utf-8")
+        # Check both Markdown links and backtick paths used by older wrappers.
+        paths = re.findall(r"\[[^\]]+\]\(([^)]+)\)", content)
+        paths += re.findall(r"`(\.\./[^`]+\.md)`", content)
+        shared_paths = [path.split("#", 1)[0] for path in paths if path.startswith("../")]
+        assert shared_paths, f"{entry} must link to its installed shared policy"
+        for path in shared_paths:
+            target = (wrapper.parent / path).resolve()
+            assert target.is_relative_to(skills_dir.resolve())
+            assert target.is_file(), f"Broken installed reference: {entry}/{path}"
+
+
 def test_setup_honors_cpp_interviewer_home(tmp_path):
     """CPP_INTERVIEWER_HOME should override the default user-data directory."""
     data_home = tmp_path / "portable-data"
@@ -96,8 +148,10 @@ def test_setup_honors_cpp_interviewer_home(tmp_path):
 def test_editable_develop_install_works_in_venv(tmp_path):
     """The coach backend should be installable after clone without global side effects."""
     venv_dir = tmp_path / "venv"
+    env = isolated_env(tmp_path)
     subprocess.run(
         [sys.executable, "-m", "venv", str(venv_dir)],
+        env=env,
         check=True,
         text=True,
         capture_output=True,
@@ -106,8 +160,9 @@ def test_editable_develop_install_works_in_venv(tmp_path):
     python_bin = venv_dir / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
 
     result = subprocess.run(
-        [str(python_bin), "setup.py", "develop"],
+        [str(python_bin), "setup.py", "develop", "--no-deps"],
         cwd=REPO_ROOT,
+        env=env,
         text=True,
         capture_output=True,
         timeout=120,
@@ -115,13 +170,17 @@ def test_editable_develop_install_works_in_venv(tmp_path):
 
     assert result.returncode == 0, result.stdout + result.stderr
 
+    other_project = tmp_path / "unrelated-project"
+    other_project.mkdir()
     import_result = subprocess.run(
-        [str(python_bin), "-c", "import coach.cli; print(coach.cli.main(['status', '--json']))"],
-        cwd=REPO_ROOT,
+        [str(python_bin), "-m", "coach.cli", "status", "--json"],
+        cwd=other_project,
+        env=env,
         text=True,
         capture_output=True,
         timeout=120,
     )
 
     assert import_result.returncode == 0, import_result.stdout + import_result.stderr
-    assert '"total"' in import_result.stdout
+    assert "total" in json.loads(import_result.stdout)
+    assert (tmp_path / "data" / "coach.sqlite").exists()

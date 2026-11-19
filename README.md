@@ -27,6 +27,8 @@ Cpp-Interviewer 是一个面向主流 Agent 的 C++ 面试 skill 项目，提供
 - **无需 PDF/Git LFS**：内置知识索引，clone 后即可安装使用。
 - **Agent 中立**：核心 skill 可被 Codex、Claude Code、Cursor、Gemini、Copilot 等 Agent 复用。
 
+知识索引中的 `books/...pdf` 是可选资料路径，书籍需由用户自行提供，仓库不附带这些 PDF。资料缺失时仍可进行基础讲解；Agent 应使用可访问来源或稳定知识，不能声称查阅了未打开的文件。
+
 ### 让 Agent 直接安装
 
 把下面这段发给你的本地 Agent 即可：
@@ -64,6 +66,22 @@ python setup.py --skills-dir /path/to/your/agent/skills
 ```
 
 安装后重启对应 Agent。在支持 slash skill 的环境中输入 `/`，即可看到 `interview` 和 `coach`。不支持 slash skill 的 Agent 可以读取仓库内的 `.github/copilot-instructions.md`，或直接引用 `skills/cpp-interviewer/SKILL.md`。
+
+`python setup.py` 负责复制 skill 文件；它不会把 Python 后端安装到当前解释器。仓库根目录可直接运行 `python -m coach.cli ...`。若要从其他项目目录调用，请在选定的虚拟环境中运行 `python setup.py develop`，随后使用该环境的 Python。只有 skill 文件可用而 CLI 不可用时，仍可对话练习，但不会保存训练状态。
+
+### 兼容性与验证范围
+
+以下区分文件布局兼容与真实 Agent 会话。安装测试使用临时目录，不会安装到开发者的真实 skills 目录；通过它不等于自动触发或回答质量已经验证。
+
+| Agent / 入口 | 交付方式 | 安装布局检查 | 自动触发 | Interview / Coach 真实会话 | 持久化会话 |
+|---|---|---|---|---|---|
+| Codex | `.codex/skills` | 自动测试覆盖 | 待验证 | 待验证 | 待验证 |
+| Claude Code | `.claude/skills` | 自动测试覆盖 | 待验证 | 待验证 | 待验证 |
+| Cursor | `.cursor/skills` | 自动测试覆盖 | 待验证 | 待验证 | 待验证 |
+| 通用 skills 目录 | `.agents/skills` | 自动测试覆盖 | 由宿主决定，待验证 | 待验证 | 待验证 |
+| Gemini / Copilot 等其他环境 | 引用核心文件或 Copilot instructions | 引用路径静态检查 | 待验证 | 待验证 | 待验证 |
+
+验证记录基准日期：2026-11-19。Python 工程测试与 Agent 行为评测分开记录；更新表中状态时附上 Agent / 模型版本、日期和实际记录。可重放用例、评分方式与隔离要求见 [行为评测说明](evals/README.md)。
 
 ### 两种模式
 
@@ -125,6 +143,8 @@ python -m coach.cli reset --yes
 ```
 
 如需安装 `coach` / `cpp-coach` console script，可运行 `python setup.py develop`。
+
+修改 Skill 指令后，除工程测试外还应运行 [行为评测](evals/README.md)，比较相同输入经过核心 Skill 和兼容入口的结果；模型或宿主更新后重跑固定用例，保留失败案例。
 
 ### 项目结构
 
@@ -202,6 +222,8 @@ Cpp-Interviewer is an agent-neutral C++ interview skill with two modes:
 - **No PDF or Git LFS required**: it works with the built-in knowledge index after clone.
 - **Portable across agents**: Codex, Claude Code, Cursor, Gemini, Copilot, and other tools can reuse the same core skill.
 
+Paths such as `books/...pdf` in the index refer to optional, user-supplied books; these PDFs are not distributed in this repository. Basic explanations still work without them. Use accessible sources or stable knowledge, and never claim to have consulted a file that was not opened.
+
 ### Agent-Friendly Install
 
 Give this to your local agent:
@@ -240,6 +262,22 @@ Common targets:
 
 For instruction-only agents, use `.github/copilot-instructions.md` or point the agent at `skills/cpp-interviewer/SKILL.md`.
 
+`python setup.py` copies skill files; it does not install the Python backend into the active interpreter. `python -m coach.cli ...` works from the repository root. To call it from another project directory, run `python setup.py develop` in a chosen virtual environment and use that environment's Python. If only the skill files are available, conversational practice remains available without persistence.
+
+### Compatibility And Verification Scope
+
+Layout compatibility and real agent sessions are separate checks. Installer tests use temporary directories, not the developer's real skills directories; passing them does not establish automatic triggering or answer quality.
+
+| Agent / entry | Delivery | Install layout | Automatic triggering | Real Interview / Coach sessions | Persistence sessions |
+|---|---|---|---|---|---|
+| Codex | `.codex/skills` | Automated tests | Not verified | Not verified | Not verified |
+| Claude Code | `.claude/skills` | Automated tests | Not verified | Not verified | Not verified |
+| Cursor | `.cursor/skills` | Automated tests | Not verified | Not verified | Not verified |
+| Generic skills directory | `.agents/skills` | Automated tests | Host-dependent; not verified | Not verified | Not verified |
+| Other environments, including Gemini / Copilot | Core file or Copilot instructions | Static reference checks | Not verified | Not verified | Not verified |
+
+Verification baseline: November 19, 2026. Keep Python engineering checks separate from agent behavior results. Record agent/model version, date, and actual transcripts when updating this table. See [behavior evals](evals/README.md) for replayable cases, grading, and isolated state.
+
 ### Usage
 
 ```text
@@ -275,6 +313,8 @@ python -m coach.cli reset --yes
 ```
 
 Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console scripts.
+
+After changing skill instructions, run the [behavior evals](evals/README.md) as well as engineering tests. Compare the same inputs through the core skill and compatibility entries, rerun fixed cases after model or host changes, and retain failed cases.
 
 ### Export And Reset
 

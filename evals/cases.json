@@ -1,0 +1,331 @@
+{
+  "schema_version": "1.0",
+  "entrypoints": {
+    "core": "skills/cpp-interviewer/SKILL.md",
+    "interview": "skills/interview/SKILL.md",
+    "coach": "skills/coach/SKILL.md"
+  },
+  "cases": [
+    {
+      "id": "trigger-explanation",
+      "kind": "trigger",
+      "expected_mode": "interview",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-positive", "concept"],
+      "preconditions": ["新会话；只让宿主按正常机制发现已安装的技能，不预先加载任何技能正文。"],
+      "context": [],
+      "prompt": "我在准备 C++ 面试，帮我讲一下 RAII 和资源管理。",
+      "checks": ["宿主的技能选择或读取记录表明使用了本项目的讲解入口或核心入口。", "直接解释问题，不切换成等待用户回答的训练流程。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-practice",
+      "kind": "trigger",
+      "expected_mode": "coach",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-positive", "training"],
+      "preconditions": ["新会话；技能由宿主自动发现；使用空的隔离训练数据库。"],
+      "context": [],
+      "prompt": "帮我模拟 C++ 面试，练习智能指针，一次只问我一道题。",
+      "checks": ["技能选择记录表明使用 Coach 训练规则。", "只提出一道相关问题并等待，不提前评价尚未提供的答案。"],
+      "required_evidence": ["activation_trace", "response", "tool_calls"]
+    },
+    {
+      "id": "trigger-interview-concept",
+      "kind": "trigger",
+      "expected_mode": "interview",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-positive", "concept"],
+      "preconditions": ["新会话；技能由宿主自动发现；没有预先加载 Skill 正文。"],
+      "context": [],
+      "prompt": "我在准备 C++ 面试，虚函数和纯虚函数有什么区别？",
+      "checks": ["宿主记录显示加载了本项目的学习入口或核心 Skill。", "直接解释区别，不转成等待用户作答的训练流程。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-weak-topic-practice",
+      "kind": "trigger",
+      "expected_mode": "coach",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-positive", "training", "weak-topic"],
+      "preconditions": ["新会话；技能由宿主自动发现；使用空的隔离训练数据库。"],
+      "context": [],
+      "prompt": "我总是答不好 STL 迭代器失效，帮我针对这个薄弱点练习，一次只问一道题。",
+      "checks": ["技能选择记录表明使用 Coach 训练规则。", "只问一道与迭代器失效相关的问题并等待答案。"],
+      "required_evidence": ["activation_trace", "response", "tool_calls"]
+    },
+    {
+      "id": "trigger-due-review",
+      "kind": "trigger",
+      "expected_mode": "coach",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-positive", "state"],
+      "preconditions": ["新会话；CLI 可用；使用没有到期记录的隔离数据库。"],
+      "context": [],
+      "prompt": "查看我 C++ 面试训练里今天到期的复习内容。",
+      "checks": ["自动选择训练状态或复习相关入口。", "依据实际查询结果说明暂无到期记录，不编造历史训练数据。"],
+      "required_evidence": ["activation_trace", "response", "tool_calls", "state_snapshot"]
+    },
+    {
+      "id": "trigger-negative-readme",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative"],
+      "preconditions": ["新会话；当前项目是一份普通天气应用文档，没有 C++ 面试或学习上下文。"],
+      "context": [],
+      "prompt": "帮我的天气应用写一个 README，包含功能介绍和启动步骤。",
+      "checks": ["未加载本项目的 Skill 正文。", "正常完成文档任务，不加入面试答题卡、评分或训练问题。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-python",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative"],
+      "preconditions": ["新会话；没有面试准备或训练上下文。"],
+      "context": [],
+      "prompt": "写一个 Python 函数，读取 CSV 并按日期排序，返回排序后的行。",
+      "checks": ["未加载本项目的 Skill 正文。", "按普通代码请求处理，不要求用户先回答问题或记录掌握度。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-frontend",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative"],
+      "preconditions": ["新会话；没有 C++、计算机基础面试或训练上下文。"],
+      "context": [],
+      "prompt": "把这个 React 登录表单的错误提示改成中文，其他行为保持不变。",
+      "checks": ["未加载本项目的 Skill 正文。", "不将界面文案修改转成面试解释或追问训练。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-regex",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative"],
+      "preconditions": ["新会话；没有 C++ 或面试上下文。"],
+      "context": [],
+      "prompt": "Explain what this regular expression does and show a matching example: ^[A-Z]{2}\\d{4}$",
+      "checks": ["未加载本项目的 Skill 正文。", "直接解释正则并给出匹配示例，不加入面试训练或掌握度记录。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-docker",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative"],
+      "preconditions": ["新会话；没有 C++ 或面试上下文。"],
+      "context": [],
+      "prompt": "我的 Docker 容器启动后马上退出，帮我检查 Compose 配置。",
+      "checks": ["未加载本项目的 Skill 正文。", "按普通 Docker 排错任务处理，不引入面试答题或追问规则。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-cpp-bugfix",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative", "near-domain"],
+      "preconditions": ["新会话；用户没有面试准备、学习或训练上下文。"],
+      "context": [],
+      "prompt": "修复这个 C++ 程序的段错误，并给出补丁；这是生产代码维护，不是面试练习。",
+      "checks": ["未加载本项目的 Skill 正文。", "按普通 C++ 调试和补丁任务处理，不主动切换到面试讲解、出题或掌握度记录。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "trigger-negative-cmake",
+      "kind": "trigger",
+      "expected_mode": "none",
+      "entrypoints": ["auto"],
+      "tags": ["trigger-negative", "near-domain"],
+      "preconditions": ["新会话；用户没有 C++ 面试或训练上下文。"],
+      "context": [],
+      "prompt": "配置 CMake，让这个 C++ 项目在 Windows 上链接 OpenSSL 并生成安装包。",
+      "checks": ["未加载本项目的 Skill 正文。", "按普通构建配置任务处理，不把工程工作改写为面试学习流程。"],
+      "required_evidence": ["activation_trace", "response"]
+    },
+    {
+      "id": "execution-code-only",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["entrypoint-parity", "code-only"],
+      "preconditions": ["两个入口分别在干净上下文中执行同一输入；不读取另一个入口的测试结果。"],
+      "context": [],
+      "prompt": "只给我设置 C++17 的 CMake 代码，不要解释。",
+      "checks": ["仅返回所需的 CMake 代码，不附教学段落、面试总结或追问。", "代码确实设置 C++17 要求，不引入完整工程或无关选项。", "两个入口都遵守代码限定；不要求逐字相同。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-concise-concept",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["entrypoint-parity", "concept", "concise"],
+      "preconditions": ["分别加载对应入口及它明确引用的相关文件。"],
+      "context": [],
+      "prompt": "简洁解释右值引用，别写面试话术，也不要追问。",
+      "checks": ["正确解释右值引用与移动语义的关系，避免把 std::move 说成一定执行移动。", "服从简洁、非面试话术、无追问三个要求。", "两个入口均直接讲解，不要求用户先作答。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-comparison",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["entrypoint-parity", "comparison", "accuracy"],
+      "preconditions": ["不强制输出任何固定标题或表格，以技术内容判断。"],
+      "context": [],
+      "prompt": "从资源所有权和使用场景比较 unique_ptr 与 shared_ptr。",
+      "checks": ["区分独占与共享所有权，说明 shared_ptr 的引用计数成本。", "说明选择应由所有权语义决定，不宣称 shared_ptr 总是更安全或更快。", "聚焦当前比较，不自动扩展成完整智能指针教程。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-targeted-followup",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["entrypoint-parity", "followup"],
+      "preconditions": ["将 context 作为已发生的对话提供，再发送 prompt。"],
+      "context": [
+        {"role": "user", "content": "vector 扩容后，旧指针为什么可能不能用了？"},
+        {"role": "assistant", "content": "发生重新分配时，vector 将元素放入新存储区并释放旧存储区，指向旧元素存储的指针会失效。"}
+      ],
+      "prompt": "只补充一点：如果没有重新分配呢？不要重讲刚才的内容。",
+      "checks": ["围绕无重新分配的情况解释，区分具体操作及相关失效规则，不笼统声称所有迭代器永不失效。", "不重复 vector 定义、扩容背景或上一轮完整答案。", "不自动附加面试口述版或问题列表。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-interview-wording",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["entrypoint-parity", "oral-answer"],
+      "preconditions": ["不把面试口述请求误当作让 Agent 主动出题。"],
+      "context": [],
+      "prompt": "把虚函数的实现整理成一分钟左右可以直接说的面试回答。",
+      "checks": ["给出连贯可口述的答案，不进入等待用户作答的 Coach 模式。", "说明动态派发的目的，并将虚表、虚指针限定为常见实现。", "长度与一分钟口述相称，不重复输出多个总结版本。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-coach-first-question",
+      "kind": "execution",
+      "expected_mode": "coach",
+      "entrypoints": ["core", "coach"],
+      "tags": ["training", "state", "entrypoint-parity"],
+      "preconditions": ["CLI 可用；使用全新的隔离数据库，保存运行前状态快照。"],
+      "context": [],
+      "prompt": "训练我虚函数，一次问一道题。",
+      "checks": ["只提出一道与虚函数相关的问题并等待。", "没有用户答案时不输出该题评分、不调用 save-result。", "数据库中的问答结果记录数没有增加。"],
+      "required_evidence": ["response", "tool_calls", "state_snapshot"]
+    },
+    {
+      "id": "execution-coach-score-and-save",
+      "kind": "execution",
+      "expected_mode": "coach",
+      "entrypoints": ["core", "coach"],
+      "tags": ["training", "scoring", "state"],
+      "preconditions": ["CLI 可用；使用独立数据库和索引副本，当前 topic_id 为 cpp_vtable。", "context 是本轮之前真实或固定重放的题目；不得额外构造其他用户答案。", "同一答案至少重复评分三次并分别使用空数据库，比较理由和分数波动。"],
+      "context": [
+        {"role": "user", "content": "训练我虚函数，一次问一道题。"},
+        {"role": "assistant", "content": "通过基类指针调用虚函数时，最终调用哪个版本由什么决定？虚表和虚指针在常见实现里怎样参与这个过程？"}
+      ],
+      "prompt": "所有类都有虚表，虚函数调用在编译时就按指针的静态类型决定了；vptr 指向函数代码。",
+      "checks": ["指出答案中的关键事实错误，而不因表达流畅给出整体正确评价。", "按评分依据给出可解释评价，总分和 rating 一致；未实际编译不得宣称编译验证通过。", "只保存当前题目和当前用户答案一次，数据库新增记录内容与对话一致。", "反馈后至多提出一道后续题；重复评分的大幅分歧需要调查，不能取最好一次代替全部结果。"],
+      "required_evidence": ["response", "tool_calls", "state_snapshot", "score_record"]
+    },
+    {
+      "id": "execution-coach-stop",
+      "kind": "execution",
+      "expected_mode": "coach",
+      "entrypoints": ["core", "coach"],
+      "tags": ["training", "exit", "state"],
+      "preconditions": ["正在训练，上一题尚未回答；运行前记录数据库问答行数。"],
+      "context": [
+        {"role": "user", "content": "开始智能指针训练。"},
+        {"role": "assistant", "content": "unique_ptr 表达怎样的所有权？为什么它不能像普通指针那样复制？"}
+      ],
+      "prompt": "退出，不练了。",
+      "checks": ["简短确认结束，不继续问新题。", "不将退出指令作为技术答案评分或保存为一条训练结果。"],
+      "required_evidence": ["response", "tool_calls", "state_snapshot"]
+    },
+    {
+      "id": "execution-cli-unavailable",
+      "kind": "execution",
+      "expected_mode": "coach",
+      "entrypoints": ["core", "coach"],
+      "tags": ["fallback", "training"],
+      "preconditions": ["宿主无法执行 Python/CLI；明确提供此能力限制，不故意破坏宿主 Python 环境。", "没有可读取的历史数据库。"],
+      "context": [],
+      "prompt": "训练我 RAII，一次一题，并记录掌握度。",
+      "checks": ["说明当前不能持久化训练记录，不虚构保存成功或已有掌握度。", "仍能开始一道相关的纯对话训练题并等待答案。", "不擅自安装包、改全局配置或要求提供 API Key。"],
+      "required_evidence": ["response", "tool_calls"]
+    },
+    {
+      "id": "execution-missing-books",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["fallback", "sources"],
+      "preconditions": ["使用不含 books 目录的临时仓库副本；保留知识索引中的书籍引用。", "不下载、分发第三方书籍；可访问公开来源时如实记录读取证据。"],
+      "context": [],
+      "prompt": "解释 RAII，索引里引用的书我还没下载。",
+      "checks": ["仍完成基础讲解，不因本地 PDF 缺失反复失败。", "不声称已经打开、阅读或核对不存在的书籍，不捏造页码。", "需要来源时只标注实际可访问且已读取的资料；对无法核对的内容保持准确表述。"],
+      "required_evidence": ["response", "tool_calls"]
+    },
+    {
+      "id": "execution-unknown-topic",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["fallback", "unknown-input"],
+      "preconditions": ["知识索引没有名为 NebulaOwnerXYZ 的条目，当前上下文没有对此名称的定义。"],
+      "context": [],
+      "prompt": "解释 NebulaOwnerXYZ 的 C++ 所有权保证。",
+      "checks": ["说明无法识别该名称或请求定义/代码上下文，不编造标准库组件。", "不把没有命中的索引结果说成已找到确切知识点。"],
+      "required_evidence": ["response", "tool_calls"]
+    },
+    {
+      "id": "execution-ambiguous-input",
+      "kind": "execution",
+      "expected_mode": "clarify",
+      "entrypoints": ["core", "interview"],
+      "tags": ["ambiguous-input"],
+      "preconditions": ["新会话，没有编号选项、历史问题或其他可将数字映射到技术主题的上下文。"],
+      "context": [],
+      "prompt": "3",
+      "checks": ["用一个简短问题澄清用户想询问的主题。", "不凭空指定第 3 个知识点，不生成无关长答案。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-false-premise",
+      "kind": "execution",
+      "expected_mode": "interview",
+      "entrypoints": ["core", "interview"],
+      "tags": ["accuracy", "false-premise"],
+      "preconditions": ["对技术内容独立核验，不以提及某个关键词即算通过。"],
+      "context": [],
+      "prompt": "C++ 标准是不是规定每个类都有 vptr，所以 sizeof(空类) 一定等于一个指针？",
+      "checks": ["直接纠正错误前提，区分标准要求、常见虚派发实现和 ABI/平台细节。", "不将空类对象大小固定说成指针大小，不编造本次并未进行的编译实验。"],
+      "required_evidence": ["response"]
+    },
+    {
+      "id": "execution-reset-confirmation",
+      "kind": "execution",
+      "expected_mode": "coach",
+      "entrypoints": ["core", "coach"],
+      "tags": ["confirmation", "state"],
+      "preconditions": ["使用含一条虚构训练记录的临时数据库及索引副本；记录二者的运行前状态。", "本轮之前没有用户确认重置的证据；不要使用真实训练数据。"],
+      "context": [],
+      "prompt": "重置我的面试训练状态。",
+      "checks": ["先请求明确确认，不立即执行 reset --yes。", "数据库训练记录与知识索引保持不变。", "说明重置范围是训练状态，不把知识索引列为删除对象。"],
+      "required_evidence": ["response", "tool_calls", "state_snapshot"]
+    }
+  ]
+}
