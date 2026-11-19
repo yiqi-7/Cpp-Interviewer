@@ -87,16 +87,26 @@ python setup.py --skills-dir /path/to/your/agent/skills
 
 | 入口 | 模式 | 核心定位 | 示例 |
 |------|------|----------|------|
-| `/interview` | 知识讲解（学） | 直接给高密度答案，适合快速复习 | `/interview 虚函数是怎么实现的` |
+| `/interview` | 知识讲解（学） | 直接给高密度答案，适合快速复习 | `/interview 进程的内存空间结构` |
 | `/coach` | 面试训练（练） | 一次一题，追问式训练 | `/coach 虚函数`、`/coach weak` |
 
 #### `/interview` 示例
 
 ```text
-/interview 虚函数是怎么实现的
-/interview 智能指针有哪几种
-/interview 什么是内存泄漏
+/interview 虚函数表的位置
 /interview 进程的内存空间结构
+/interview 栈和堆有什么区别
+/interview 虚函数是怎么实现的
+```
+
+##### 回答示例：虚函数表的位置
+
+```text
+C++ 标准没有规定虚函数表（vtable）或虚指针（vptr）的具体布局，它们属于编译器和 ABI 的实现细节。
+
+常见实现中，vtable 通常位于程序映像的只读或重定位后只读数据区，例如 ELF 平台的 .rodata / .data.rel.ro，或 MSVC 的 .rdata。对象中的隐藏 vptr 通常指向相应的表；对象本身仍按存储期位于栈、堆或静态存储区。多继承对象可能包含多个 vptr。
+
+因此，面试中可以概括为：虚函数表通常放在程序的只读数据区域，虚指针通常存放在对象内部；具体布局取决于编译器、ABI 和平台，不能当作 C++ 标准保证。
 ```
 
 ##### 完整回答示例：进程的内存空间结构
@@ -107,7 +117,7 @@ python setup.py --skills-dir /path/to/your/agent/skills
 /interview 进程的内存空间结构
 ```
 
-典型回答会先说明这是**虚拟地址空间**，再给出常见布局和实现边界：
+典型回答会先说明这是**虚拟地址空间**，再给出常见布局和实现边界。下图是示意布局，不代表所有系统的固定顺序：
 
 ```text
 高地址
@@ -322,8 +332,9 @@ Verification baseline: November 19, 2026. Keep Python engineering checks separat
 
 ```text
 /interview How are virtual functions implemented
-/interview What types of smart pointers are there
+/interview Where is the virtual function table located?
 /interview What is the process memory space layout
+/interview What is the difference between stack and heap?
 /coach virtual_function
 /coach weak
 /coach status
@@ -357,6 +368,16 @@ Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console
 
 After changing skill instructions, run the [behavior evals](evals/README.md) as well as engineering tests. Compare the same inputs through the core skill and compatibility entries, rerun fixed cases after model or host changes, and retain failed cases.
 
+#### Example answer: virtual function table location
+
+```text
+The C++ standard does not specify a virtual table (vtable) or virtual pointer (vptr); their layout is an implementation detail of the compiler and ABI.
+
+In common implementations, a vtable lives in a read-only or relocation-protected read-only section of the program image, such as .rodata or .data.rel.ro on ELF systems, or .rdata with MSVC. An object's hidden vptr usually points to the relevant table. The object itself can still have automatic, dynamic, or static storage duration, and multiple inheritance may require more than one vptr.
+
+So the concise answer is: the vtable is commonly stored in read-only program data, while the vptr is commonly stored inside the object. The exact layout depends on the compiler, ABI, and platform; it is not guaranteed by C++.
+```
+
 #### Example answer: process memory space layout
 
 Prompt:
@@ -365,7 +386,7 @@ Prompt:
 /interview What is the process memory space layout?
 ```
 
-A useful answer should identify the layout as a **virtual address space** and distinguish common implementation choices from guarantees:
+A useful answer should identify the layout as a **virtual address space** and distinguish common implementation choices from guarantees. This is illustrative; systems do not all use this exact order:
 
 ```text
 High addresses
