@@ -96,7 +96,47 @@ python setup.py --skills-dir /path/to/your/agent/skills
 /interview 虚函数是怎么实现的
 /interview 智能指针有哪几种
 /interview 什么是内存泄漏
+/interview 进程的内存空间结构
 ```
+
+##### 完整回答示例：进程的内存空间结构
+
+输入：
+
+```text
+/interview 进程的内存空间结构
+```
+
+典型回答会先说明这是**虚拟地址空间**，再给出常见布局和实现边界：
+
+```text
+高地址
+┌──────────────────────┐
+│ 栈 Stack              │  局部变量、参数、返回地址
+│       ↓ 向低地址增长  │
+├──────────────────────┤
+│ mmap / 共享库区域     │  动态库、文件映射、共享内存
+├──────────────────────┤
+│ 堆 Heap               │  malloc/new 动态分配
+│       ↑ 向高地址增长  │
+├──────────────────────┤
+│ BSS                   │  未初始化的全局/静态变量
+├──────────────────────┤
+│ Data                  │  已初始化的全局/静态变量
+├──────────────────────┤
+│ Rodata                │  字符串常量、只读常量
+├──────────────────────┤
+│ Text / Code           │  程序机器指令
+└──────────────────────┘
+低地址
+```
+
+- Text 通常可读可执行；Data、BSS 和堆保存进程数据，栈保存调用现场。
+- 堆向上增长、栈向下增长是常见实现，不是 C++ 标准保证；实际布局由操作系统、CPU 架构、链接器和 ABI 决定。
+- 这是进程看到的虚拟地址空间，不等同于物理内存；ASLR 还会随机化部分区域的实际地址。
+- 共享库、线程本地存储、保护页和内核空间可能出现在图示之外；具体区域和顺序应以目标平台的内存映射为准。
+
+这个示例体现 `/interview` 的默认行为：直接解释当前问题，先给可读的整体模型，再补充平台相关边界，不自动切换为模拟面试或追加追问。
 
 #### `/coach` 示例
 
@@ -283,6 +323,7 @@ Verification baseline: November 19, 2026. Keep Python engineering checks separat
 ```text
 /interview How are virtual functions implemented
 /interview What types of smart pointers are there
+/interview What is the process memory space layout
 /coach virtual_function
 /coach weak
 /coach status
@@ -315,6 +356,40 @@ python -m coach.cli reset --yes
 Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console scripts.
 
 After changing skill instructions, run the [behavior evals](evals/README.md) as well as engineering tests. Compare the same inputs through the core skill and compatibility entries, rerun fixed cases after model or host changes, and retain failed cases.
+
+#### Example answer: process memory space layout
+
+Prompt:
+
+```text
+/interview What is the process memory space layout?
+```
+
+A useful answer should identify the layout as a **virtual address space** and distinguish common implementation choices from guarantees:
+
+```text
+High addresses
+┌──────────────────────┐
+│ Stack                │  locals, arguments, return state
+│       ↓ grows down   │
+├──────────────────────┤
+│ mmap / shared libs   │  libraries, file mappings, shared memory
+├──────────────────────┤
+│ Heap                 │  malloc/new allocations
+│       ↑ grows up     │
+├──────────────────────┤
+│ BSS                  │  zero-initialized global/static data
+├──────────────────────┤
+│ Data                 │  initialized global/static data
+├──────────────────────┤
+│ Read-only data       │  literals and constants
+├──────────────────────┤
+│ Text / code          │  executable instructions
+└──────────────────────┘
+Low addresses
+```
+
+The answer should also state that stack/heap growth directions and the exact order are common OS/ABI conventions rather than C++ guarantees, that virtual addresses are different from physical memory, and that ASLR changes runtime addresses.
 
 ### Export And Reset
 
