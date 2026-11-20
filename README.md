@@ -2,12 +2,11 @@
 
 # Cpp-Interviewer
 
-**C++ 面试学习伙伴 — 学 + 练，下载后可直接交给 Agent 使用**
+用本地 AI Agent 复习 C++ 面试知识，或逐题练习并跟踪掌握度。
 
-[中文](#中文) | [English](#english)
+[中文快速开始](#中文) · [English quick start](#english) · [问题反馈 / Issues](https://github.com/yiqi-7/Cpp-Interviewer/issues)
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Agent%20Skills-lightgrey.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
 
@@ -17,31 +16,30 @@
 
 ## 中文
 
-### 简介
+### 快速开始
 
-Cpp-Interviewer 是一个面向主流 Agent 的 C++ 面试 skill 项目，提供学 + 练双模式：
+准备 Git、Python 3.10 或更新版本，以及能加载本地 Skills 的 Agent。项目使用宿主 Agent 的模型，不需要为本项目另配 API Key。
 
-- **`/interview` 直接给精炼答案**：默认简洁模式，不模拟面试、不反问，覆盖 C++、STL、操作系统、网络、数据库等高频考点。
-- **`/coach` 模拟面试官追问**：出题 → 等你回答 → 六维度评价 → 记录掌握度 → 继续追问薄弱点。
-- **无需 API Key**：直接使用当前 Agent 作为 LLM。
-- **无需 PDF/Git LFS**：内置知识索引，clone 后即可安装使用。
-- **Agent 中立**：核心 skill 可被 Codex、Claude Code、Cursor、Gemini、Copilot 等 Agent 复用。
+在终端运行以下命令，默认安装到 Codex 的 `~/.codex/skills/`：
 
-知识索引中的 `books/...pdf` 是可选资料路径，书籍需由用户自行提供，仓库不附带这些 PDF。资料缺失时仍可进行基础讲解；Agent 应使用可访问来源或稳定知识，不能声称查阅了未打开的文件。
-
-### 让 Agent 直接安装
-
-把下面这段发给你的本地 Agent 即可：
-
-```text
-请安装 Cpp-Interviewer：
+```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
 cd Cpp-Interviewer
-python setup.py --agents all
-安装后重启当前 Agent，并用 /interview 或 /coach 测试。
+python setup.py
 ```
 
-默认安装到常见 skills 目录：
+终端出现 `[OK] codex: ...` 和 `Done! Restart your agent...` 表示安装脚本已完成。重启 Agent，在聊天框试用：
+
+```text
+/interview 虚函数表存在哪里？
+/coach 虚函数
+```
+
+`/interview` 应直接解释虚函数表，并说明布局取决于编译器和 ABI。`/coach` 应先出一道题，等你回答后再评分。自动出现斜杠入口和真实会话表现取决于宿主，验证范围见下文。
+
+### 选择安装位置
+
+从仓库根目录运行 `python setup.py --agents all` 可安装到下表四个目标：
 
 | Agent | 安装目录 |
 |------|----------|
@@ -50,28 +48,22 @@ python setup.py --agents all
 | Claude Code | `~/.claude/skills/` |
 | 通用 Agent skills 目录 | `~/.agents/skills/` |
 
-只安装到当前 Codex：
-
-```bash
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git
-cd Cpp-Interviewer
-python setup.py
-```
-
-指定目标或自定义目录：
+可以指定目标，或仅安装到自定义目录：
 
 ```bash
 python setup.py --agents codex,cursor,claude
 python setup.py --skills-dir /path/to/your/agent/skills
 ```
 
-安装后重启对应 Agent。在支持 slash skill 的环境中输入 `/`，即可看到 `interview` 和 `coach`。不支持 slash skill 的 Agent 可以读取仓库内的 `.github/copilot-instructions.md`，或直接引用 `skills/cpp-interviewer/SKILL.md`。
+安装后重启目标 Agent。不支持斜杠入口时，可让 Agent 读取[核心 Skill](skills/cpp-interviewer/SKILL.md)，Copilot 也可以读取[仓库指令](.github/copilot-instructions.md)。
 
 `python setup.py` 负责复制 skill 文件；它不会把 Python 后端安装到当前解释器。仓库根目录可直接运行 `python -m coach.cli ...`。若要从其他项目目录调用，请在选定的虚拟环境中运行 `python setup.py develop`，随后使用该环境的 Python。只有 skill 文件可用而 CLI 不可用时，仍可对话练习，但不会保存训练状态。
 
 ### 兼容性与验证范围
 
 以下区分文件布局兼容与真实 Agent 会话。安装测试使用临时目录，不会安装到开发者的真实 skills 目录；通过它不等于自动触发或回答质量已经验证。
+
+知识索引内置在仓库里，无需 Git LFS。`books/...pdf` 是用户可自行提供的可选资料，仓库不附带 PDF。基本讲解可继续；Agent 只能引用实际可访问的资料。
 
 | Agent / 入口 | 交付方式 | 安装布局检查 | 自动触发 | Interview / Coach 真实会话 | 持久化会话 |
 |---|---|---|---|---|---|
@@ -161,7 +153,7 @@ C++ 标准没有规定虚函数表（vtable）或虚指针（vptr）的具体布
 /coach start           # 进入训练循环
 ```
 
-`/coach` 会像面试官一样：**出题 → 等你回答 → 评价 → 追问 → 下一题**。
+`/coach` 会像面试官一样：**出题 → 等你回答 → 六维度评价 → 追问或进入下一题**。Python 后端可用时，会把评估结果写入本地 SQLite。
 
 ### 状态和路径
 
@@ -184,13 +176,14 @@ $env:CPP_INTERVIEWER_INDEX="C:\path\to\knowledge_index.json"
 ### 开发者调试
 
 ```bash
+python -m pip install pytest
 python -m pytest -q
 python -m coach.cli status
 python -m coach.cli topic search 虚函数 --json
 python -m coach.cli topic-context cpp_vtable --json
-python -m coach.cli export --format md --output coach-export.md
-python -m coach.cli reset --yes
 ```
+
+首次运行 `status` 时，空数据库会显示 `答题记录数: 0`；`topic-context` 返回含有 `"topic_id":"cpp_vtable"` 的 JSON，说明 CLI 可以读取知识索引。
 
 如需安装 `coach` / `cpp-coach` console script，可运行 `python setup.py develop`。
 
@@ -250,7 +243,7 @@ python -m coach.cli reset --yes
 
 ### 开源许可
 
-本项目采用 [MIT License](https://github.com/yiqi-7/Cpp-Interviewer/blob/main/LICENSE) 开源。
+本项目采用 [MIT License](LICENSE) 开源。发现问题时，可在 [Issues](https://github.com/yiqi-7/Cpp-Interviewer/issues) 中附上 Agent、模型、复现步骤和实际表现。提交 PR 前请运行工程测试；涉及 Skill 行为时参考[行为评测说明](evals/README.md)。
 
 ### 社区
 
@@ -262,31 +255,11 @@ python -m coach.cli reset --yes
 
 ## English
 
-### Introduction
+Cpp-Interviewer is a local agent skill for reviewing C++ interview topics and practicing one question at a time. It uses your host agent's model, so it needs no separate API key.
 
-Cpp-Interviewer is an agent-neutral C++ interview skill with two modes:
+### Quick Start
 
-- **`/interview`**: concise, direct explanations for C++ and CS interview topics.
-- **`/coach`**: one-question-at-a-time interview practice with six-dimension evaluation and SQLite mastery tracking.
-- **No API key required**: the host agent is the LLM.
-- **No PDF or Git LFS required**: it works with the built-in knowledge index after clone.
-- **Portable across agents**: Codex, Claude Code, Cursor, Gemini, Copilot, and other tools can reuse the same core skill.
-
-Paths such as `books/...pdf` in the index refer to optional, user-supplied books; these PDFs are not distributed in this repository. Basic explanations still work without them. Use accessible sources or stable knowledge, and never claim to have consulted a file that was not opened.
-
-### Agent-Friendly Install
-
-Give this to your local agent:
-
-```text
-Install Cpp-Interviewer:
-git clone https://github.com/yiqi-7/Cpp-Interviewer.git
-cd Cpp-Interviewer
-python setup.py --agents all
-Restart the target agent, then test /interview or /coach.
-```
-
-Install only to Codex:
+You need Git, Python 3.10 or later, and an agent that can load local skills. Run these commands in a terminal to install for Codex:
 
 ```bash
 git clone https://github.com/yiqi-7/Cpp-Interviewer.git
@@ -294,9 +267,21 @@ cd Cpp-Interviewer
 python setup.py
 ```
 
+Look for `[OK] codex: ...` and `Done! Restart your agent...` in the output. Restart the agent and try these prompts in the chat:
+
+```text
+/interview Where is the virtual function table located?
+/coach virtual functions
+```
+
+`/interview` should give a direct answer and explain that vtable layout depends on the compiler and ABI. `/coach` should ask one question and wait for your answer before scoring it. Slash command discovery and session behavior depend on the host; see the verification scope below.
+
+### Installation Targets
+
 Choose targets or a custom skills directory:
 
 ```bash
+python setup.py --agents all
 python setup.py --agents codex,cursor,claude
 python setup.py --skills-dir /path/to/your/agent/skills
 ```
@@ -310,13 +295,15 @@ Common targets:
 | Claude Code | `~/.claude/skills/` |
 | Generic agent skills | `~/.agents/skills/` |
 
-For instruction-only agents, use `.github/copilot-instructions.md` or point the agent at `skills/cpp-interviewer/SKILL.md`.
+For agents without slash commands, point the agent at the [core skill](skills/cpp-interviewer/SKILL.md) or use the [Copilot instructions](.github/copilot-instructions.md) for Copilot.
 
 `python setup.py` copies skill files; it does not install the Python backend into the active interpreter. `python -m coach.cli ...` works from the repository root. To call it from another project directory, run `python setup.py develop` in a chosen virtual environment and use that environment's Python. If only the skill files are available, conversational practice remains available without persistence.
 
 ### Compatibility And Verification Scope
 
 Layout compatibility and real agent sessions are separate checks. Installer tests use temporary directories, not the developer's real skills directories; passing them does not establish automatic triggering or answer quality.
+
+The knowledge index is included and does not require Git LFS. Paths such as `books/...pdf` refer to optional user-supplied books. Basic explanations work without these PDFs; the agent should cite only sources it could access.
 
 | Agent / entry | Delivery | Install layout | Automatic triggering | Real Interview / Coach sessions | Persistence sessions |
 |---|---|---|---|---|---|
@@ -330,17 +317,17 @@ Verification baseline: November 19, 2026. Keep Python engineering checks separat
 
 ### Usage
 
+`/interview` provides direct explanations. `/coach` asks one question at a time, scores your answer across six dimensions, and tracks mastery in SQLite when the Python backend is available.
+
 ```text
 /interview How are virtual functions implemented
 /interview Where is the virtual function table located?
 /interview What is the process memory space layout
 /interview What is the difference between stack and heap?
-/coach virtual_function
+/coach virtual functions
 /coach weak
 /coach status
 /coach plan
-python -m coach.cli export --format md --output coach-export.md
-python -m coach.cli reset --yes
 ```
 
 ### State
@@ -356,13 +343,14 @@ export CPP_INTERVIEWER_INDEX="/path/to/knowledge_index.json"
 ### Developer Mode
 
 ```bash
+python -m pip install pytest
 python -m pytest -q
 python -m coach.cli status
-python -m coach.cli topic search virtual_function --json
+python -m coach.cli topic search vtable --json
 python -m coach.cli topic-context cpp_vtable --json
-python -m coach.cli export --format md --output coach-export.md
-python -m coach.cli reset --yes
 ```
+
+On a fresh database, `status` displays `答题记录数: 0` (zero answers). `topic-context` returns JSON containing `"topic_id":"cpp_vtable"`, which confirms the CLI can read the knowledge index.
 
 Run `python setup.py develop` only if you want the `coach` / `cpp-coach` console scripts.
 
@@ -441,4 +429,4 @@ python -m coach.cli reset --yes
 
 ### License
 
-This project is licensed under the [MIT License](https://github.com/yiqi-7/Cpp-Interviewer/blob/main/LICENSE).
+This project is licensed under the [MIT License](LICENSE). Report problems in [GitHub Issues](https://github.com/yiqi-7/Cpp-Interviewer/issues) with the agent, model, steps to reproduce, and actual behavior. Run the engineering tests before submitting a PR; for behavior changes, follow the [eval guide](evals/README.md).
