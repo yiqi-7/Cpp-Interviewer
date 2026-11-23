@@ -4,6 +4,8 @@
 
 [开始使用](#快速开始) · [English](#english) · [问题反馈](https://github.com/yiqi-7/Cpp-Interviewer/issues) · [MIT](LICENSE)
 
+**技术栈：** Python 3.10+（安装与本地训练 CLI）· SQLite（训练记录）· Markdown（Agent 指令与知识库）。
+
 ## 快速开始
 
 需要 Git、Python 3.10+ 和能读取本地文件的 Agent。
@@ -66,6 +68,8 @@ python -m coach.cli status --json
 ## English
 
 Review C++ topics with `/interview`, or practice one question at a time with `/coach`. The host agent supplies the model; no separate API key or PDF download is required.
+
+**Stack:** Python 3.10+ (installer and local training CLI) · SQLite (practice history) · Markdown (agent instructions and knowledge base).
 
 Follow the [quick start](#快速开始) with Git and Python 3.10+. The installer defaults to Codex; add `--agents claude` or `--agents cursor` for those hosts. Look for `[OK]`, then restart your agent and open the cloned repo. Start with `/coach virtual functions`: it should ask one question and wait for your answer before giving feedback. For a direct explanation, try `/interview Where is the vtable stored?`.
 
